@@ -311,12 +311,14 @@ public class JoinUtil {
 			}
            
 			// Log as having quit
-	        s = conn.prepareStatement( "UPDATE oracle_joins SET player_quit = ? WHERE player_quit IS NULL"+users );
+	        s = conn.prepareStatement( "UPDATE oracle_joins SET player_quit = ? WHERE server_id = ? AND player_quit IS NULL"+users );
 	        s.setLong(1, System.currentTimeMillis() / 1000L);
+	        s.setInt(2, ServerUtil.lookupServer());
     		s.executeUpdate();
     		
     		// Update playtime
-			s = conn.prepareStatement("UPDATE oracle_joins SET playtime = (player_quit - player_join) WHERE (player_quit - player_join) > 0 AND playtime IS NULL"+users);
+			s = conn.prepareStatement("UPDATE oracle_joins SET playtime = (player_quit - player_join) WHERE server_id = ? AND player_join < player_quit AND playtime IS NULL"+users);
+			s.setInt(1, ServerUtil.lookupServer());
 			s.executeUpdate();
     		
         } catch (SQLException e) {
@@ -343,12 +345,14 @@ public class JoinUtil {
 			conn = Oracle.dbc();
            
 			// Log as having quit
-	        s = conn.prepareStatement( "UPDATE oracle_joins SET player_quit = ? WHERE player_quit IS NULL" );
+	        s = conn.prepareStatement( "UPDATE oracle_joins SET player_quit = ? WHERE server_id = ? AND player_quit IS NULL" );
 	        s.setLong(1, System.currentTimeMillis() / 1000L);
+	        s.setInt(2, ServerUtil.lookupServer());
     		s.executeUpdate();
     		
     		// Update playtime
-			s = conn.prepareStatement("UPDATE oracle_joins SET playtime = (player_quit - player_join) WHERE  (player_quit - player_join) > 0 AND playtime IS NULL");
+			s = conn.prepareStatement("UPDATE oracle_joins SET playtime = (player_quit - player_join) WHERE server_id = ? AND player_join < player_quit AND playtime IS NULL");
+			s.setInt(1, ServerUtil.lookupServer());
 			s.executeUpdate();
     		
         } catch (SQLException e) {
