@@ -317,7 +317,7 @@ public class JoinUtil {
     		s.executeUpdate();
     		
     		// Update playtime
-			s = conn.prepareStatement("UPDATE oracle_joins SET playtime = (player_quit - player_join) WHERE server_id = ? AND player_join < player_quit AND playtime IS NULL"+users);
+			s = conn.prepareStatement("UPDATE oracle_joins SET playtime = (player_quit - player_join) WHERE server_id = ? AND player_join < player_quit AND playtime IS NULL AND player_quit IS NOT NULL"+users);
 			s.setInt(1, ServerUtil.lookupServer());
 			s.executeUpdate();
     		
@@ -351,7 +351,7 @@ public class JoinUtil {
     		s.executeUpdate();
     		
     		// Update playtime
-			s = conn.prepareStatement("UPDATE oracle_joins SET playtime = (player_quit - player_join) WHERE server_id = ? AND player_join < player_quit AND playtime IS NULL");
+			s = conn.prepareStatement("UPDATE oracle_joins SET playtime = (player_quit - player_join) WHERE server_id = ? AND player_join < player_quit AND playtime IS NULL AND player_quit IS NOT NULL");
 			s.setInt(1, ServerUtil.lookupServer());
 			s.executeUpdate();
     		
