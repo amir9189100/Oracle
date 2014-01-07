@@ -297,9 +297,9 @@ public class Oracle extends JavaPlugin {
 					"`ip_id` int(10) unsigned NOT NULL," +
 					"PRIMARY KEY (`join_id`)," +
 					"KEY `player_id` (`player_id`)," +
-					"KEY `ip_id` (`ip_id`)" +
-					"KEY `server_id` (`server_id`)" +
-					"KEY `playtime` (`playtime`)" +
+					"KEY `ip_id` (`ip_id`)," +
+					"KEY `server_id` (`server_id`)," +
+					"KEY `playtime` (`playtime`)," +
 					"KEY `player_quit` (`player_quit`)" +
 					") ENGINE=InnoDB  DEFAULT CHARSET=latin1;";
 			st.executeUpdate(query);

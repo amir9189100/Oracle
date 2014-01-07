@@ -27,22 +27,6 @@ public class WarnCommands extends Executor {
 	 */
 	private void setupCommands() {
 		
-
-		/**
-		 * /warn delete [id]
-		 */
-		addSub( new String[]{"delete"}, "oracle.warn")
-		.allowConsole()
-		.setMinArgs(1)
-		.setHandler(new SubHandler() {
-            public void handle(CallInfo call) {
-            	// delete the warning
-				WarningUtil.deleteWarning( Integer.parseInt( call.getArg(0) ) );
-				call.getSender().sendMessage( Oracle.messenger.playerMsg("Warning deleted successfully."));
-				return;
-            }
-		});
-		
 		
 		/**
 		 * /warn [username] [msg]
@@ -54,6 +38,12 @@ public class WarnCommands extends Executor {
             public void handle(CallInfo call) {
             	
             	if(call.getArgs().length >= 2){
+
+            		if( call.getArg(0).equals("delete") ){
+        				WarningUtil.deleteWarning( Integer.parseInt( call.getArg(1) ) );
+        				call.getSender().sendMessage( Oracle.messenger.playerMsg("Warning deleted successfully."));
+        				return;
+            		}
 					
 					String reason = "";
 					for (int i = 1; i < call.getArgs().length; i = i + 1){
