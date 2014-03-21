@@ -100,3 +100,11 @@ This plugin was custom designed by viveleroi for the amazing *s.dhmc.us* Minecra
 
 - viveleroi (Creator, Lead Developer)
 - nasonfish (Contributor to dhmcStats)
+
+### Metrics
+
+This plugin utilizes Hidendra's plugin metrics system, which, if enabled, anonymously tracks the following about your server at mcstats.org: A unique identifier, server java version, online mode, plugin & server versions, OS version/name and architecture, cpu core count, player counts. 
+
+This information is used purely to help inform our technical decisions and boost our egos with how many people are enjoying our work.
+
+Opting out of this service can be done by editing plugins/Plugin Metrics/config.yml and changing opt-out to true.
