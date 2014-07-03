@@ -60,7 +60,11 @@ public class BanCommand implements SubHandler {
 		// Save to db
 		try {
 			BanUtil.banByUsername( call.getSender(), player, reason );
-			plugin.getServer().broadcastMessage( Oracle.messenger.playerHeaderMsg( call.getSender().getName() + " banned " + username + " for: " + reason ) );
+			for( Player p : Bukkit.getOnlinePlayers() ){
+			    if( p.hasPermission( "oracle.bans.alert" ) ){
+			        p.sendMessage( Oracle.messenger.playerHeaderMsg( call.getSender().getName() + " banned " + username + " for: " + reason ) );
+			    }
+			}
 		} catch (Exception e) {
 			call.getSender().sendMessage( Oracle.messenger.playerError( e.getMessage() ) );
 		}

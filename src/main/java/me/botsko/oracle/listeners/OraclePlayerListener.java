@@ -201,7 +201,7 @@ public class OraclePlayerListener implements Listener {
 				} catch (Exception e){
 					event.setKickMessage( "Banned. " + e.getMessage() );
 					event.setResult( Result.KICK_OTHER );
-					plugin.log( "Rejecting player login due to ban. For: " + player.getName() );
+					Oracle.log( "Rejecting player login due to ban. For: " + player.getName() );
 				}
 //			}
 //    	});
