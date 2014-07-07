@@ -65,7 +65,7 @@ public class WarningsCommand implements SubHandler {
 		List<Warning> warnings = WarningUtil.getPlayerWarnings( warned_player );
 		if(!warnings.isEmpty()){
 			for(Warning warn : warnings){
-				sender.sendMessage( Oracle.messenger.playerMsg( "["+ warn.id + "] " + warn.epoch + ": " + ChatColor.RED + warn.reason + " by: " + ChatColor.WHITE + warn.moderator) );
+				sender.sendMessage( Oracle.messenger.playerMsg( "["+ warn.id + "] " + warn.epoch + ": " + ChatColor.RED + warn.reason + ChatColor.WHITE + "By: " + ChatColor.WHITE + warn.moderator) );
 			}
 		} else {
 			sender.sendMessage( Oracle.messenger.playerError("No warnings filed.") );
