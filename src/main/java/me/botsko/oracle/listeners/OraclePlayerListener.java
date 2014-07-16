@@ -82,7 +82,7 @@ public class OraclePlayerListener implements Listener {
         	plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable(){
     			public void run(){
     				
-    				JoinUtil.registerPlayerJoin( player, plugin.getServer().getOnlinePlayers().length );
+    				JoinUtil.registerPlayerJoin( player, plugin.getServer().getOnlinePlayers().size() );
     				
     				// Cache playtime hour count so we can detect when it's increased
     				Playtime playtime = PlaytimeUtil.getPlaytime(player);

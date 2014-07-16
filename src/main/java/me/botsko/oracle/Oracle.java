@@ -144,7 +144,7 @@ public class Oracle extends JavaPlugin {
 			
 			// Create join records for all currently online players
 			for( Player pl : getServer().getOnlinePlayers() ){
-				JoinUtil.registerPlayerJoin( pl, getServer().getOnlinePlayers().length );
+				JoinUtil.registerPlayerJoin( pl, getServer().getOnlinePlayers().size() );
 			}
 			
 			// Register tasks
@@ -462,8 +462,8 @@ public class Oracle extends JavaPlugin {
     public String expandName(String Name) {
         int m = 0;
         String Result = "";
-        for (int n = 0; n < getServer().getOnlinePlayers().length; n++) {
-            String str = getServer().getOnlinePlayers()[n].getName();
+        for ( Player p : getServer().getOnlinePlayers() ) {
+            String str = p.getName();
             if (str.matches("(?i).*" + Name + ".*")) {
                 m++;
                 Result = str;
