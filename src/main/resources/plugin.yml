@@ -1,6 +1,6 @@
 name: Oracle
 main: me.botsko.oracle.Oracle
-version: ${pom.version} Build: ${env.BUILD_NUMBER}
+version: ${pom.version}-b${env.BUILD_NUMBER}
 default: op
 commands:
    alts:
