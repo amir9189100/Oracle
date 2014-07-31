@@ -105,7 +105,7 @@ public class JoinUtil {
 				Bukkit.getServer().getPluginManager().callEvent( event );
 				
 				// Create a new player!
-				PlayerIdentification.addPlayer( player );
+				pluginPlayer = PlayerIdentification.addPlayer( player );
 
 			}
 			
