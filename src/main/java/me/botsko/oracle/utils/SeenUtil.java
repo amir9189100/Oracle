@@ -10,6 +10,8 @@ import java.util.Date;
 import org.bukkit.OfflinePlayer;
 
 import me.botsko.oracle.Oracle;
+import me.botsko.oracle.players.PlayerIdentification;
+import me.botsko.oracle.players.PluginPlayer;
 
 public class SeenUtil {
 	
@@ -28,11 +30,11 @@ public class SeenUtil {
 		try {
 			
 			// Insert/Get Player ID
-			int player_id = JoinUtil.lookupPlayer( player );
+		    PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( player.getName() );
 			
 			conn = Oracle.dbc();
     		s = conn.prepareStatement ("SELECT player_join FROM oracle_joins WHERE player_id = ? ORDER BY player_join LIMIT 1;");
-    		s.setInt(1, player_id);
+    		s.setInt(1, pluginPlayer.getId());
     		s.executeQuery();
     		rs = s.getResultSet();
     		
@@ -65,11 +67,11 @@ public class SeenUtil {
 		try {
 			
 			// Insert/Get Player ID
-			int player_id = JoinUtil.lookupPlayer( player );
+		    PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( player.getName() );
 						
 			conn = Oracle.dbc();
     		s = conn.prepareStatement ("SELECT player_quit FROM oracle_joins j WHERE player_id = ? AND player_quit IS NOT NULL ORDER BY player_quit DESC LIMIT 1;");
-    		s.setInt(1, player_id);
+    		s.setInt(1, pluginPlayer.getId());
     		s.executeQuery();
     		rs = s.getResultSet();
     		

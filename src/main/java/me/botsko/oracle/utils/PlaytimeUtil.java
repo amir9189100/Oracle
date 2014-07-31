@@ -10,6 +10,8 @@ import java.util.Date;
 import org.bukkit.OfflinePlayer;
 
 import me.botsko.oracle.Oracle;
+import me.botsko.oracle.players.PlayerIdentification;
+import me.botsko.oracle.players.PluginPlayer;
 
 public class PlaytimeUtil {
 
@@ -27,12 +29,12 @@ public class PlaytimeUtil {
 		try {
 			
 			// Insert/Get Player ID
-			int player_id = JoinUtil.lookupPlayer( player );
-			
+		    PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( player.getName() );
+
 			conn = Oracle.dbc();
 			
 			s = conn.prepareStatement ("SELECT SUM(playtime) as playtime FROM oracle_joins WHERE player_id = ?");
-			s.setInt(1, player_id);
+			s.setInt(1, pluginPlayer.getId());
 			s.executeQuery();
 			ResultSet rs = s.getResultSet();
 	
@@ -41,7 +43,7 @@ public class PlaytimeUtil {
 			
 			// We also need to pull any incomplete join and calc up-to-the-minute playtime
 			s = conn.prepareStatement ("SELECT player_join FROM oracle_joins WHERE player_id = ? AND player_quit IS NULL");
-			s.setInt(1, player_id);
+			s.setInt(1, pluginPlayer.getId());
 			s.executeQuery();
 			rs = s.getResultSet();
 			

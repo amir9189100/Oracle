@@ -6,11 +6,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import me.botsko.oracle.commands.OracleCommands;
 import me.botsko.oracle.commands.WarnCommands;
 import me.botsko.oracle.listeners.OraclePlayerListener;
+import me.botsko.oracle.players.PlayerIdentification;
+import me.botsko.oracle.players.PluginPlayer;
 import me.botsko.oracle.tasks.PlaytimeMonitor;
 import me.botsko.oracle.utils.AnnouncementUtil;
 import me.botsko.oracle.utils.BungeeCord;
@@ -40,7 +43,7 @@ public class Oracle extends JavaPlugin {
 //	public Language lang;
 	public static FileConfiguration config;
 	public static Messenger messenger;
-	public static HashMap<Player,Integer> oraclePlayers = new HashMap<Player,Integer>();
+	public static HashMap<UUID,PluginPlayer> oraclePlayers = new HashMap<UUID,PluginPlayer>();
 	public static int oracleServer = 0;
 	public static HashMap<Player,Integer> playtimeHours = new HashMap<Player,Integer>();
 
@@ -94,6 +97,9 @@ public class Oracle extends JavaPlugin {
 			
 			// Cache server id
 			ServerUtil.lookupServer( config.getString("oracle.server-alias") );
+			
+			// Cache online players on reload
+			PlayerIdentification.cacheOnlinePlayerPrimaryKeys();
 		
 			try {
 			    Metrics metrics = new Metrics(this);
@@ -306,6 +312,7 @@ public class Oracle extends JavaPlugin {
 			query = "CREATE TABLE IF NOT EXISTS `oracle_players` (" +
 					"`player_id` int(10) unsigned NOT NULL AUTO_INCREMENT," +
 					"`player` varchar(16) NOT NULL," +
+					"`player_uuid` binary(16) NOT NULL," +
 					"PRIMARY KEY (`player_id`)," +
 					"KEY `player` (`player`)" +
 					") ENGINE=InnoDB  DEFAULT CHARSET=latin1;";
@@ -348,48 +355,7 @@ public class Oracle extends JavaPlugin {
 			e.printStackTrace();
 		}
 	}
-	
-	
-//	/**
-//	 * Attempt to reconnect to the database
-//	 * @return
-//	 * @throws SQLException 
-//	 */
-//	protected boolean attemptToRescueConnection( SQLException e ) throws SQLException{
-//		if( e.getMessage().contains("connection closed") ){
-//			rebuildPool();
-//			if( pool != null ){
-//				Connection conn = dbc();
-//				if( conn != null && !conn.isClosed() ){
-//					return true;
-//				}
-//			}
-//		}
-//		return false;
-//	}
-	
-	
-//	/**
-//	 * 
-//	 */
-//	public void handleDatabaseException(SQLException e) {
-//		// Attempt to rescue
-//		try {
-//			if( attemptToRescueConnection( e ) ){
-//				return;
-//			}
-//		} catch (SQLException e1){
-//		}
-//		log("Database connection error: " + e.getMessage());
-//		if (e.getMessage().contains("marked as crashed")) {
-//			String[] msg = new String[2];
-//			msg[0] = "If MySQL crashes during write it may corrupt it's indexes.";
-//			msg[1] = "Try running `CHECK TABLE prism_actions` and then `REPAIR TABLE prism_actions`.";
-//			logSection(msg);
-//		}
-//		e.printStackTrace();
-//	}
-	
+
 	
 	/**
 	 * If a user disconnects in an unknown way that is never caught by onPlayerQuit,
@@ -401,8 +367,11 @@ public class Oracle extends JavaPlugin {
 			    public void run(){
 			    	String on_users = "";
 					for(Player pl: getServer().getOnlinePlayers()) {
-						int player_id = JoinUtil.lookupPlayer(pl);
-						on_users += ""+player_id+",";
+	
+					    PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( pl );
+					    if( pluginPlayer == null ) continue;
+
+						on_users += ""+pluginPlayer.getId()+",";
 					}
 					if(!on_users.isEmpty()){
 						on_users = on_users.substring(0, on_users.length()-1);

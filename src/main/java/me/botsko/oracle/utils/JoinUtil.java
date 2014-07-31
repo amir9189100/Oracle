@@ -14,92 +14,10 @@ import org.bukkit.entity.Player;
 
 import me.botsko.oracle.Oracle;
 import me.botsko.oracle.events.OracleFirstTimePlayerEvent;
+import me.botsko.oracle.players.PlayerIdentification;
+import me.botsko.oracle.players.PluginPlayer;
 
 public class JoinUtil {
-	
-	
-	/**
-	 * 
-	 */
-	public static int lookupPlayer( OfflinePlayer player ){
-		
-		// Look at cache first
-		if( Oracle.oraclePlayers.containsKey(player) ){
-			Oracle.debug("Found player id in cache");
-			return Oracle.oraclePlayers.get(player);
-		}
-
-		Connection conn = null;
-		PreparedStatement s = null;
-		ResultSet rs = null;
-		try {
-
-			conn = Oracle.dbc();
-    		s = conn.prepareStatement( "SELECT player_id FROM oracle_players WHERE player = ?" );
-    		s.setString(1, player.getName());
-    		rs = s.executeQuery();
-
-    		if( rs.next() ){
-    			
-    			Oracle.debug("Found player id from database");
-    			
-    			// Cache for online players
-    			if( player instanceof Player ){
-    				Oracle.debug("Adding online player record to cache");
-    				Oracle.oraclePlayers.put( (Player) player, rs.getInt("player_id") );
-    			}
-    			return rs.getInt("player_id");
-    		}
-		} catch (SQLException e) {
-//        	handleDatabaseException( e );
-        } finally {
-        	if(rs != null) try { rs.close(); } catch (SQLException e) {}
-        	if(s != null) try { s.close(); } catch (SQLException e) {}
-        	if(conn != null) try { conn.close(); } catch (SQLException e) {}
-        }
-		return 0;
-	}
-	
-	
-	/**
-	 * Saves a player name to the database, and adds the id to the cache hashmap
-	 */
-	protected static int registerPlayer( OfflinePlayer player ){
-		
-		Connection conn = null;
-		PreparedStatement s = null;
-		ResultSet rs = null;
-		try {
-
-			conn = Oracle.dbc();
-            s = conn.prepareStatement( "INSERT INTO oracle_players (player) VALUES (?)" , Statement.RETURN_GENERATED_KEYS);
-            s.setString(1, player.getName());
-            s.executeUpdate();
-            
-            rs = s.getGeneratedKeys();
-            if (rs.next()) {
-            	
-            	Oracle.debug("Saved new player record to database");
-            	
-            	// Cache for online players
-    			if( player instanceof Player ){
-    				Oracle.debug("Adding newly-created online player record to cache");
-    				Oracle.oraclePlayers.put( (Player) player, rs.getInt(1) );
-    			}
-            	return rs.getInt(1);
-            } else {
-                throw new SQLException("Insert statement failed - no generated key obtained.");
-            }
-		} catch (SQLException e) {
-        	
-        } finally {
-        	if(rs != null) try { rs.close(); } catch (SQLException e) {}
-        	if(s != null) try { s.close(); } catch (SQLException e) {}
-        	if(conn != null) try { conn.close(); } catch (SQLException e) {}
-        }
-		return 0;
-	}
-	
 	
 	/**
 	 * 
@@ -130,7 +48,6 @@ public class JoinUtil {
         }
 		return 0;
 	}
-	
 	
 	/**
 	 * Saves a player name to the database, and adds the id to the cache hashmap
@@ -163,7 +80,6 @@ public class JoinUtil {
 		return 0;
 	}
 	
-	
 	/**
 	 * Creates a join record for this player, and stores the player username/ip
 	 * to the appropriate tables.
@@ -181,22 +97,23 @@ public class JoinUtil {
 			int ip_id = lookupIp( ip );
 			
 			// Insert/Get Player ID
-			int player_id = lookupPlayer( player );
-			if( player_id == 0 ){
+			PluginPlayer pluginPlayer = PlayerIdentification.cacheOraclePlayer( player );
+			if( pluginPlayer == null ){
 				
 				// Throw event as this is a new player
 				OracleFirstTimePlayerEvent event = new OracleFirstTimePlayerEvent( player );
 				Bukkit.getServer().getPluginManager().callEvent( event );
 				
-				player_id = registerPlayer( player );
-				
-			}
+				// Create a new player!
+				PlayerIdentification.addPlayer( player );
 
+			}
+			
 			conn = Oracle.dbc();
 	        s = conn.prepareStatement("INSERT INTO oracle_joins (server_id,player_count,player_id,player_join,ip_id) VALUES (?,?,?,?,?)");
 	        s.setInt(1, ServerUtil.lookupServer());
 	        s.setInt(2, online_count);
-	        s.setInt(3, player_id);
+	        s.setInt(3, pluginPlayer.getId());
 	        s.setLong(4, System.currentTimeMillis() / 1000L);
 	        s.setInt(5, ip_id);
 	        s.executeUpdate();
@@ -225,15 +142,15 @@ public class JoinUtil {
 			int ip_id = lookupIp( ip );
 			
 			// Insert/Get Player ID
-			int player_id = lookupPlayer( player );
-			if( player_id == 0 ){
-				throw new Exception("Could not find joins for this player.");
+			PluginPlayer pluginPlayer = PlayerIdentification.cacheOraclePlayer( player );
+			if( pluginPlayer == null ){
+				throw new Exception("Could not find player");
 			}
 			
 			conn = Oracle.dbc();
 	        s = conn.prepareStatement("UPDATE oracle_joins SET ip_id = ? WHERE player_quit IS NULL AND player_id = ?");
 	        s.setInt(1, ip_id);
-	        s.setInt(2, player_id);
+	        s.setInt(2, pluginPlayer.getId());
 	        s.executeUpdate();
         } catch (SQLException e){
             e.printStackTrace();
@@ -258,22 +175,22 @@ public class JoinUtil {
 		try {
 			
 			// Insert/Get Player ID
-			int player_id = lookupPlayer( player );
-			if( player_id == 0 ){
-				throw new Exception("Could not find joins for this player.");
-			}
+		    PluginPlayer pluginPlayer = PlayerIdentification.cacheOraclePlayer( player );
+            if( pluginPlayer == null ){
+                throw new Exception("Could not find player");
+            }
 			
 			conn = Oracle.dbc();
 			
 			// Set the quit date for the players join session
 			pstmt = conn.prepareStatement("UPDATE oracle_joins SET player_quit = ? WHERE player_quit IS NULL AND player_id = ?");
 			pstmt.setLong(1, System.currentTimeMillis() / 1000L);
-			pstmt.setInt(2, player_id);
+			pstmt.setInt(2, pluginPlayer.getId());
 			pstmt.executeUpdate();
   
 			// Update playtime
 			pstmt = conn.prepareStatement("UPDATE oracle_joins SET playtime = (player_quit - player_join) WHERE player_id = ? AND playtime IS NULL");
-			pstmt.setInt(1, player_id);
+			pstmt.setInt(1, pluginPlayer.getId());
 			pstmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -379,10 +296,10 @@ public class JoinUtil {
 		try {
 			
 			// Insert/Get Player ID
-			int player_id = lookupPlayer( player );
-			if( player_id == 0 ){
-				throw new Exception("Could not find joins for this player.");
-			}
+		    PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( player.getName() );
+            if( pluginPlayer == null ){
+                throw new Exception("Could not find player");
+            }
             
 			conn = Oracle.dbc();
 			
@@ -393,8 +310,8 @@ public class JoinUtil {
     				"JOIN oracle_joins AS joins2 ON joins2.ip_id = i.ip_id AND joins2.player_id  != ? " +
     				"JOIN oracle_players AS p ON joins2.player_id = p.player_id " +
     				"WHERE j.player_id = ?");
-    		s.setInt(1, player_id);
-    		s.setInt(2, player_id);
+    		s.setInt(1, pluginPlayer.getId());
+    		s.setInt(2, pluginPlayer.getId());
     		s.executeQuery();
     		rs = s.getResultSet();
     		

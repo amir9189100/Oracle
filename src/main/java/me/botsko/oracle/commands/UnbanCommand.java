@@ -25,7 +25,12 @@ public class UnbanCommand implements SubHandler {
 		OfflinePlayer player = Bukkit.getOfflinePlayer( call.getArg(0) );
 
 		// Save to db
-		BanUtil.unbanByUsername( call.getSender(), player );
+		try {
+            BanUtil.unbanByUsername( call.getSender(), player );
+        } catch ( Exception e ) {
+            call.getSender().sendMessage( Oracle.messenger.playerError( e.getMessage() ) );
+            return;
+        }
 		
 		// Success
 		call.getSender().sendMessage( Oracle.messenger.playerHeaderMsg("Player has been unbanned.") );

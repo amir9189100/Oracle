@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.botsko.oracle.Oracle;
+import me.botsko.oracle.players.PlayerIdentification;
+import me.botsko.oracle.players.PluginPlayer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -38,27 +40,28 @@ public class WarningUtil {
 	 * 
 	 * @param person
 	 * @param account_name
+	 * @throws Exception 
 	 */
-	public static void fileWarning( OfflinePlayer player, String reason, CommandSender staff ){
+	public static void fileWarning( OfflinePlayer player, String reason, CommandSender staff ) throws Exception{
 		Connection conn = null;
 		PreparedStatement s = null;
 		try {
 			
-			// Insert/Get Player ID
-			int player_id = JoinUtil.lookupPlayer( player );
-			
-			int staff_player_id = 0;
-			if( staff instanceof Player ){
-				staff_player_id = JoinUtil.lookupPlayer( (Player) staff );
-			}
+		    // Insert/Get Player ID
+		    PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( player.getName() );
+		    if( pluginPlayer == null ){
+		        throw new Exception("That player has not played on this server.");
+		    }
+
+		    PluginPlayer staffPluginPlayer = PlayerIdentification.cacheOraclePlayer( (Player)staff );
 			
 			conn = Oracle.dbc();
 
 	        s = conn.prepareStatement("INSERT INTO oracle_warnings (player_id,reason,epoch,staff_player_id) VALUES (?,?,?,?)");
-	        s.setInt(1, player_id);
+	        s.setInt(1, pluginPlayer.getId());
 	        s.setString(2, reason);
 	        s.setLong(3, System.currentTimeMillis() / 1000L);
-	        s.setInt(4, staff_player_id);
+	        s.setInt(4, staffPluginPlayer.getId());
 	        s.executeUpdate();
 
 		} catch (SQLException e){

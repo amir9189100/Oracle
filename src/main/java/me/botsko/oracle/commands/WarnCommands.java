@@ -62,7 +62,12 @@ public class WarnCommands extends Executor {
 					}
 
 					// File warning
-					WarningUtil.fileWarning( warned_player, reason, call.getSender() );
+					try {
+                        WarningUtil.fileWarning( warned_player, reason, call.getSender() );
+                    } catch ( Exception e ) {
+                        call.getSender().sendMessage( Oracle.messenger.playerError( e.getMessage() ) );
+                        return;
+                    }
 					
 					// Alert them
 					if( warned_player instanceof Player ){
