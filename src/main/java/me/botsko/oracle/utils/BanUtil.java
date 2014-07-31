@@ -33,12 +33,16 @@ public class BanUtil {
                 throw new Exception("That player has not played on this server.");
             }
 	
-            PluginPlayer staffPluginPlayer = PlayerIdentification.cacheOraclePlayer( (Player)staff );
+            int staff_id = 0;
+            if( staff instanceof Player ){
+                PluginPlayer staffPluginPlayer = PlayerIdentification.cacheOraclePlayer( (Player)staff );
+                staff_id = staffPluginPlayer.getId();
+            }
 			
 			conn = Oracle.dbc();
 	        s = conn.prepareStatement("INSERT INTO oracle_bans (player_id,staff_player_id,reason,epoch) VALUES (?,?,?,?)");
 	        s.setInt(1, pluginPlayer.getId());
-	        s.setInt(2, staffPluginPlayer.getId());
+	        s.setInt(2, staff_id);
 	        s.setString(3, reason);
 	        s.setLong(4, System.currentTimeMillis() / 1000L);
 	        s.executeUpdate();
@@ -64,12 +68,16 @@ public class BanUtil {
 			// Insert/Get IP ID
 			int ip_id = JoinUtil.lookupIp( ip );
 			
-            PluginPlayer staffPluginPlayer = PlayerIdentification.cacheOraclePlayer( (Player)staff );
+			int staff_id = 0;
+            if( staff instanceof Player ){
+                PluginPlayer staffPluginPlayer = PlayerIdentification.cacheOraclePlayer( (Player)staff );
+                staff_id = staffPluginPlayer.getId();
+            }
 			
 			conn = Oracle.dbc();
 	        s = conn.prepareStatement("INSERT INTO oracle_bans (ip_id,staff_player_id,reason,epoch) VALUES (?,?,?,?)");
 	        s.setInt(1, ip_id);
-	        s.setInt(2, staffPluginPlayer.getId());
+	        s.setInt(2, staff_id);
 	        s.setString(3, reason);
 	        s.setLong(4, System.currentTimeMillis() / 1000L);
 	        s.executeUpdate();
@@ -105,12 +113,16 @@ public class BanUtil {
                 throw new Exception("That player has not played on this server.");
             }
   
-            PluginPlayer staffPluginPlayer = PlayerIdentification.cacheOraclePlayer( (Player)staff );
+            int staff_id = 0;
+            if( staff instanceof Player ){
+                PluginPlayer staffPluginPlayer = PlayerIdentification.cacheOraclePlayer( (Player)staff );
+                staff_id = staffPluginPlayer.getId();
+            }
 			
 			// Add unban record
 	        s = conn.prepareStatement("INSERT INTO oracle_unbans (player_id,staff_player_id,epoch) VALUES (?,?,?)");
 	        s.setInt(1, pluginPlayer.getId());
-	        s.setInt(2, staffPluginPlayer.getId());
+	        s.setInt(2, staff_id);
 	        s.setLong(3, System.currentTimeMillis() / 1000L);
 	        s.executeUpdate();
 	        
@@ -143,12 +155,16 @@ public class BanUtil {
 			// Insert/Get Player ID
 			int ip_id = JoinUtil.lookupIp( ip );
 			
-            PluginPlayer staffPluginPlayer = PlayerIdentification.cacheOraclePlayer( (Player)staff );
+			int staff_id = 0;
+            if( staff instanceof Player ){
+                PluginPlayer staffPluginPlayer = PlayerIdentification.cacheOraclePlayer( (Player)staff );
+                staff_id = staffPluginPlayer.getId();
+            }
 			
 			// Add unban record
 	        s = conn.prepareStatement("INSERT INTO oracle_unbans (ip_id,staff_player_id,epoch) VALUES (?,?,?)");
 	        s.setInt(1, ip_id);
-	        s.setInt(2, staffPluginPlayer.getId());
+	        s.setInt(2, staff_id);
 	        s.setLong(3, System.currentTimeMillis() / 1000L);
 	        s.executeUpdate();
 	        

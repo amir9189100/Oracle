@@ -53,7 +53,11 @@ public class WarningUtil {
 		        throw new Exception("That player has not played on this server.");
 		    }
 
-		    PluginPlayer staffPluginPlayer = PlayerIdentification.cacheOraclePlayer( (Player)staff );
+		    int staff_id = 0;
+            if( staff instanceof Player ){
+                PluginPlayer staffPluginPlayer = PlayerIdentification.cacheOraclePlayer( (Player)staff );
+                staff_id = staffPluginPlayer.getId();
+            }
 			
 			conn = Oracle.dbc();
 
@@ -61,7 +65,7 @@ public class WarningUtil {
 	        s.setInt(1, pluginPlayer.getId());
 	        s.setString(2, reason);
 	        s.setLong(3, System.currentTimeMillis() / 1000L);
-	        s.setInt(4, staffPluginPlayer.getId());
+	        s.setInt(4, staff_id);
 	        s.executeUpdate();
 
 		} catch (SQLException e){
