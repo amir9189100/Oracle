@@ -74,6 +74,7 @@
                     <includes>
 						<include>org.apache.tomcat:com.springsource.org.apache.tomcat.jdbc</include>
 						<include>org.apache.juli:com.springsource.org.apache.juli.extras</include>
+						<include>me.botsko:elixr:jar:*</include>
                     </includes>
                   </artifactSet>
 				</configuration>

@@ -39,7 +39,8 @@ public class JoinUtil {
     		} else {
     			return registerIp( ip );
     		}
-		} catch (SQLException e) {
+		} catch (SQLException e){
+		    e.printStackTrace();
 //        	handleDatabaseException( e );
         } finally {
         	if(rs != null) try { rs.close(); } catch (SQLException e) {}
@@ -71,7 +72,7 @@ public class JoinUtil {
                 throw new SQLException("Insert statement failed - no generated key obtained.");
             }
 		} catch (SQLException e) {
-        	
+		    e.printStackTrace();
         } finally {
         	if(rs != null) try { rs.close(); } catch (SQLException e) {}
         	if(s != null) try { s.close(); } catch (SQLException e) {}
