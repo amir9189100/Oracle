@@ -20,9 +20,10 @@ public class PlaytimeUtil {
 	 * 
 	 * @param person
 	 * @param account_name
+	 * @throws Exception 
 	 * @throws ParseException 
 	 */
-	public static Playtime getPlaytime( OfflinePlayer player ) {
+	public static Playtime getPlaytime( OfflinePlayer player ) throws Exception {
 		Playtime playtime = null;
 		Connection conn = null;
 		PreparedStatement s = null;
@@ -30,6 +31,9 @@ public class PlaytimeUtil {
 			
 			// Insert/Get Player ID
 		    PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( player.getName() );
+		    if( pluginPlayer == null ){
+		        throw new Exception("Player has never played on this server.");
+		    }
 
 			conn = Oracle.dbc();
 			

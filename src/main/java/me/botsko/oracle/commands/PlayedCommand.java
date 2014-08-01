@@ -49,9 +49,14 @@ public class PlayedCommand implements SubHandler {
     	plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable(){
 			public void run(){
 		
-				Playtime playtime = PlaytimeUtil.getPlaytime( player );
-				String msg = ChatColor.GOLD + player.getName() + " has played for " + playtime.getHours() + " hours, " + playtime.getMinutes() + " minutes, and " + playtime.getSeconds() + " seconds. Nice!";
-				call.getSender().sendMessage( Oracle.messenger.playerHeaderMsg( msg ) );
+				Playtime playtime;
+                try {
+                    playtime = PlaytimeUtil.getPlaytime( player );
+                    String msg = ChatColor.GOLD + player.getName() + " has played for " + playtime.getHours() + " hours, " + playtime.getMinutes() + " minutes, and " + playtime.getSeconds() + " seconds. Nice!";
+                    call.getSender().sendMessage( Oracle.messenger.playerHeaderMsg( msg ) );
+                } catch ( Exception e ) {
+                    call.getSender().sendMessage( Oracle.messenger.playerError( e.getMessage() ) );
+                }
 			}
     	});
 	}

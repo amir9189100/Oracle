@@ -18,23 +18,32 @@ public class PlaytimeMonitor implements Runnable {
 
 		for( Player p : Bukkit.getServer().getOnlinePlayers() ){
 
-			Playtime playtime = PlaytimeUtil.getPlaytime(p);
-			
-			if( !Oracle.playtimeHours.containsKey(p) ) continue;
-			
-			int lastHourCount = Oracle.playtimeHours.get(p);
+			Playtime playtime;
+            try {
+                
+                playtime = PlaytimeUtil.getPlaytime(p);
+                
+                if( !Oracle.playtimeHours.containsKey(p) ) continue;
+                
+                int lastHourCount = Oracle.playtimeHours.get(p);
 
-			if( playtime.getHours() > lastHourCount ){
-				
-				Oracle.playtimeHours.put( p, playtime.getHours() );
-				
-				Oracle.log("Throwing playtime hour increase event for " + p.getName());
-				
-				// Throw event as this is a new player
-				OraclePlaytimeMilestoneEvent event = new OraclePlaytimeMilestoneEvent( p, playtime.getHours() );
-				Bukkit.getServer().getPluginManager().callEvent( event );
-				
-			}
+                if( playtime.getHours() > lastHourCount ){
+                    
+                    Oracle.playtimeHours.put( p, playtime.getHours() );
+                    
+                    Oracle.log("Throwing playtime hour increase event for " + p.getName());
+                    
+                    // Throw event as this is a new player
+                    OraclePlaytimeMilestoneEvent event = new OraclePlaytimeMilestoneEvent( p, playtime.getHours() );
+                    Bukkit.getServer().getPluginManager().callEvent( event );
+                    
+                }
+                
+            } catch ( Exception e ) {
+                e.printStackTrace();
+                continue;
+            }
+			
 		}
 	}
 }

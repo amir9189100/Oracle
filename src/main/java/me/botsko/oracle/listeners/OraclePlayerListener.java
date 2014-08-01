@@ -85,9 +85,13 @@ public class OraclePlayerListener implements Listener {
     				JoinUtil.registerPlayerJoin( player, plugin.getServer().getOnlinePlayers().size() );
     				
     				// Cache playtime hour count so we can detect when it's increased
-    				Playtime playtime = PlaytimeUtil.getPlaytime(player);
-    				Oracle.playtimeHours.put(player,playtime.getHours());
-    				
+    				Playtime playtime;
+                    try {
+                        playtime = PlaytimeUtil.getPlaytime(player);
+                        Oracle.playtimeHours.put(player,playtime.getHours());
+                    } catch ( Exception e ) {
+                        return;
+                    }
     			}
         	});
 	        

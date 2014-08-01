@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.Date;
 
 import org.bukkit.OfflinePlayer;
@@ -20,9 +19,9 @@ public class SeenUtil {
 	 * 
 	 * @param person
 	 * @param account_name
-	 * @throws ParseException 
+	 * @throws Exception 
 	 */
-	public static Date getPlayerFirstSeen( OfflinePlayer player ) throws ParseException{
+	public static Date getPlayerFirstSeen( OfflinePlayer player ) throws Exception{
 		Date joined = null;
 		Connection conn = null;
 		PreparedStatement s = null;
@@ -31,6 +30,9 @@ public class SeenUtil {
 			
 			// Insert/Get Player ID
 		    PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( player.getName() );
+		    if( pluginPlayer == null ){
+		        throw new Exception("Player has never played on this server.");
+		    }
 			
 			conn = Oracle.dbc();
     		s = conn.prepareStatement ("SELECT player_join FROM oracle_joins WHERE player_id = ? ORDER BY player_join LIMIT 1;");
@@ -57,9 +59,9 @@ public class SeenUtil {
 	 * 
 	 * @param person
 	 * @param account_name
-	 * @throws ParseException 
+	 * @throws Exception 
 	 */
-	public static Date getPlayerLastSeen( OfflinePlayer player ) throws ParseException{
+	public static Date getPlayerLastSeen( OfflinePlayer player ) throws Exception{
 		Date seen = null;
 		Connection conn = null;
 		PreparedStatement s = null;
@@ -68,6 +70,9 @@ public class SeenUtil {
 			
 			// Insert/Get Player ID
 		    PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( player.getName() );
+		    if( pluginPlayer == null ){
+                throw new Exception("Player has never played on this server.");
+            }
 						
 			conn = Oracle.dbc();
     		s = conn.prepareStatement ("SELECT player_quit FROM oracle_joins j WHERE player_id = ? AND player_quit IS NOT NULL ORDER BY player_quit DESC LIMIT 1;");

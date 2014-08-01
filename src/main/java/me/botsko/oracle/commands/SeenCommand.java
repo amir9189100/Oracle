@@ -1,7 +1,5 @@
 package me.botsko.oracle.commands;
 
-import java.text.ParseException;
-
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
@@ -59,7 +57,8 @@ public class SeenCommand implements SubHandler {
 				try {
 					call.getSender().sendMessage( Oracle.messenger.playerMsg("Joined " + SeenUtil.getPlayerFirstSeen(player)) );
 					call.getSender().sendMessage( Oracle.messenger.playerMsg("Last Seen " + SeenUtil.getPlayerLastSeen(player)) );
-				} catch (ParseException e){
+				} catch (Exception e){
+				    call.getPlayer().sendMessage( Oracle.messenger.playerError( e.getMessage() ) );
 				}
 			}
     	});
