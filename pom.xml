@@ -76,15 +76,15 @@
                     <relocations>
                         <relocation>
                             <pattern>me.botsko.elixr</pattern>
-                            <shadedPattern>me.botsko.libs.elixr</shadedPattern>
+                            <shadedPattern>com.helion3.oracle.libs.elixr</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.apache.tomcat.jdbc</pattern>
-                            <shadedPattern>com.helion3.libs.org.apache.tomcat.jdbc</shadedPattern>
+                            <shadedPattern>com.helion3.oracle.libs.org.apache.tomcat.jdbc</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.apache.juli</pattern>
-                            <shadedPattern>com.helion3.libs.org.apache.juli</shadedPattern>
+                            <shadedPattern>com.helion3.oracle.libs.org.apache.juli</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
