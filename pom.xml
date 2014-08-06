@@ -9,21 +9,25 @@
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
 			<version>1.7.10-R0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>craftbukkit</artifactId>
 			<version>1.7.10-R0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 		    <groupId>org.apache.tomcat</groupId>
 		    <artifactId>com.springsource.org.apache.tomcat.jdbc</artifactId>
 		    <version>1.0.9.3</version>
+		    <scope>compile</scope>
 		</dependency>
 		<dependency>
             <groupId>me.botsko</groupId>
             <artifactId>elixr</artifactId>
             <version>1.1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
 	</dependencies>
 	<repositories>
@@ -65,28 +69,34 @@
         </resources>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.1</version>
-				<configuration>
-					<minimizeJar>false</minimizeJar>
-					<artifactSet>
-                    <includes>
-						<include>org.apache.tomcat:com.springsource.org.apache.tomcat.jdbc</include>
-						<include>org.apache.juli:com.springsource.org.apache.juli.extras</include>
-						<include>me.botsko:elixr:jar:*</include>
-                    </includes>
-                  </artifactSet>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <relocations>
+                        <relocation>
+                            <pattern>me.botsko.elixr</pattern>
+                            <shadedPattern>me.botsko.libs.elixr</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.apache.tomcat.jdbc</pattern>
+                            <shadedPattern>com.helion3.libs.org.apache.tomcat.jdbc</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.apache.juli</pattern>
+                            <shadedPattern>com.helion3.libs.org.apache.juli</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 	</build>
 	<distributionManagement>
