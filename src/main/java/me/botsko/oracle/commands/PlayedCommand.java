@@ -11,23 +11,7 @@ import me.botsko.oracle.utils.Playtime;
 import me.botsko.oracle.utils.PlaytimeUtil;
 
 public class PlayedCommand implements SubHandler {
-	
-	/**
-	 * 
-	 */
-	private Oracle plugin;
-	
-	
-	/**
-	 * 
-	 * @param plugin
-	 * @return 
-	 */
-	public PlayedCommand(Oracle plugin) {
-		this.plugin = plugin;
-	}
-	
-	
+
 	/**
 	 * Handle the command
 	 */
@@ -35,7 +19,7 @@ public class PlayedCommand implements SubHandler {
 		
 		String username = call.getSender().getName();
 		if( call.getArgs().length > 0 ){
-			username = plugin.expandName( call.getArg(0) );
+			username = Oracle.expandName( call.getArg(0) );
 		}
 		
 		final OfflinePlayer player = Bukkit.getOfflinePlayer(username);
@@ -46,9 +30,9 @@ public class PlayedCommand implements SubHandler {
 		}
 		
 		// Check for alt accounts in async thread
-    	plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable(){
+    	new Thread(new Runnable(){
 			public void run(){
-		
+			    
 				Playtime playtime;
                 try {
                     playtime = PlaytimeUtil.getPlaytime( player );

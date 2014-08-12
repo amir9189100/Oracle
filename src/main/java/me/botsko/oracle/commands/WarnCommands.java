@@ -20,13 +20,11 @@ public class WarnCommands extends Executor {
 		super( oracle, "command", "warn" );
 		setupCommands();
 	}
-	
 
 	/**
 	 * 
 	 */
 	private void setupCommands() {
-		
 		
 		/**
 		 * /warn [username] [msg]

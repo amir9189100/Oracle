@@ -7,7 +7,6 @@ import me.botsko.oracle.utils.BanUtil;
 
 public class UnbanIpCommand implements SubHandler {
 	
-	
 	/**
 	 * Handle the command
 	 */

@@ -10,7 +10,6 @@ import me.botsko.oracle.utils.BanUtil;
 
 public class UnbanCommand implements SubHandler {
 	
-	
 	/**
 	 * Handle the command
 	 */

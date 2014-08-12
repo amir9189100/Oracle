@@ -1,5 +1,6 @@
 package me.botsko.oracle.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import me.botsko.oracle.Oracle;
@@ -9,22 +10,6 @@ import me.botsko.oracle.commandlibs.SubHandler;
 public class IsonCommand implements SubHandler {
 	
 	/**
-	 * 
-	 */
-	private Oracle plugin;
-	
-	
-	/**
-	 * 
-	 * @param plugin
-	 * @return 
-	 */
-	public IsonCommand(Oracle plugin) {
-		this.plugin = plugin;
-	}
-	
-	
-	/**
 	 * Handle the command
 	 */
 	public void handle(CallInfo call) {
@@ -32,7 +17,7 @@ public class IsonCommand implements SubHandler {
 		String username = null;
 		if(call.getArgs().length > 0){
 			// Expand partials
-			String tmp = plugin.expandName( call.getArg(0) );
+			String tmp = Oracle.expandName( call.getArg(0) );
 			if(tmp != null){
 	    		username = tmp;
 	    	}
@@ -47,14 +32,13 @@ public class IsonCommand implements SubHandler {
 		}
 	}
 	
-	
 	/**
 	 * 
 	 * @param username
 	 * @return
 	 */
 	public boolean isOnline( String username ){
-		for(Player pl : plugin.getServer().getOnlinePlayers()){
+		for(Player pl : Bukkit.getServer().getOnlinePlayers()){
 			if(pl.getName().equals(username)){
 				return true;
 			}

@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 import me.botsko.oracle.Oracle;
 import me.botsko.oracle.commandlibs.CallInfo;
@@ -15,38 +14,23 @@ import me.botsko.oracle.utils.JoinUtil;
 public class AltsCommand implements SubHandler {
 	
 	/**
-	 * 
-	 */
-	private Oracle plugin;
-	
-	
-	/**
-	 * 
-	 * @param plugin
-	 * @return 
-	 */
-	public AltsCommand(Oracle plugin) {
-		this.plugin = plugin;
-	}
-	
-	
-	/**
 	 * Handle the command
 	 */
 	public void handle( final CallInfo call ){
 		
 		// Check for alt accounts in async thread
-    	plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable(){
+    	new Thread(new Runnable(){
 			public void run(){
 		
 				List<Alt> alt_accts;
 				try {
 					
 					OfflinePlayer player = Bukkit.getOfflinePlayer( call.getArg(0) );
-					
 					alt_accts = JoinUtil.getPlayerAlts( player );
 					
-					if( alt_accts.isEmpty() ) return;
+					if( alt_accts.isEmpty() ){
+					    call.getSender().sendMessage( Oracle.messenger.playerError( "There are no known alts for that player" ) );
+					}
 					
 					String alts_list = "";
 					int i = 1;
@@ -54,15 +38,12 @@ public class AltsCommand implements SubHandler {
 						alts_list += alt.username + (i == alt_accts.size() ? "" : ", ");
 						i++;
 					}
-					for(Player pl: Bukkit.getServer().getOnlinePlayers()) {
-			    		if(pl.hasPermission("oracle.alerts.alt")){
-			    			pl.sendMessage( Oracle.messenger.playerMsg( player.getName() + "'s alts: " + alts_list) );
-			    		}
-			    	}
+					call.getSender().sendMessage( Oracle.messenger.playerMsg( player.getName() + "'s alts: " + alts_list) );
 					
-				} catch (Exception e) {
+				} catch (Exception e){
+				    e.printStackTrace();
 				}
 			}
-    	});
+    	}).start();
 	}
 }

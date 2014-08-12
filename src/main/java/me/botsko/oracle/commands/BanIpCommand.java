@@ -11,7 +11,6 @@ import me.botsko.oracle.utils.BanUtil;
 
 public class BanIpCommand implements SubHandler {
 	
-	
 	/**
 	 * Handle the command
 	 */
@@ -70,6 +69,5 @@ public class BanIpCommand implements SubHandler {
                 p.sendMessage( Oracle.messenger.playerHeaderMsg( call.getSender().getName() + " banned IP " + ip + " for: " + reason ) );
             }
         }
-    
 	}
 }

@@ -16,7 +16,6 @@ import me.botsko.oracle.utils.Warning;
 
 public class WarningsCommand implements SubHandler {
 	
-	
 	/**
 	 * Handle the command
 	 */
@@ -42,8 +41,6 @@ public class WarningsCommand implements SubHandler {
 			call.getSender().sendMessage( Oracle.messenger.playerError("Player name must be specified.") );
 		}
 	}
-	
-	
 
 	/**
 	 * 

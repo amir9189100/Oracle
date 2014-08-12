@@ -13,22 +13,6 @@ import me.botsko.oracle.utils.BanUtil;
 public class BanCommand implements SubHandler {
 	
 	/**
-	 * 
-	 */
-	private Oracle plugin;
-	
-	
-	/**
-	 * 
-	 * @param plugin
-	 * @return 
-	 */
-	public BanCommand(Oracle plugin) {
-		this.plugin = plugin;
-	}
-	
-	
-	/**
 	 * Handle the command
 	 */
 	public void handle(CallInfo call) {
@@ -52,7 +36,7 @@ public class BanCommand implements SubHandler {
 		OfflinePlayer player = Bukkit.getOfflinePlayer( username );
 		
 		// Is player online - kick them with ban reason
-		Player bannedPlayer = plugin.getServer().getPlayer( username );
+		Player bannedPlayer = Bukkit.getServer().getPlayer( username );
 		if( bannedPlayer != null ){
 			bannedPlayer.kickPlayer( "Banned: " + reason );
 		}

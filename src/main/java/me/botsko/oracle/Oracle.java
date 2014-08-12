@@ -21,6 +21,7 @@ import me.botsko.oracle.utils.JoinUtil;
 import me.botsko.oracle.utils.ServerUtil;
 
 import org.apache.tomcat.jdbc.pool.DataSource;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -428,10 +429,10 @@ public class Oracle extends JavaPlugin {
      * @param Name
      * @return
      */
-    public String expandName(String Name) {
+    public static String expandName(String Name) {
         int m = 0;
         String Result = "";
-        for ( Player p : getServer().getOnlinePlayers() ) {
+        for ( Player p : Bukkit.getServer().getOnlinePlayers() ) {
             String str = p.getName();
             if (str.matches("(?i).*" + Name + ".*")) {
                 m++;

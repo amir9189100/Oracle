@@ -9,23 +9,7 @@ import me.botsko.oracle.commandlibs.SubHandler;
 import me.botsko.oracle.utils.SeenUtil;
 
 public class SeenCommand implements SubHandler {
-	
-	/**
-	 * 
-	 */
-	private Oracle plugin;
-	
-	
-	/**
-	 * 
-	 * @param plugin
-	 * @return 
-	 */
-	public SeenCommand(Oracle plugin) {
-		this.plugin = plugin;
-	}
-	
-	
+
 	/**
 	 * Handle the command
 	 */
@@ -34,7 +18,7 @@ public class SeenCommand implements SubHandler {
 		String username = null;
 		if(call.getArgs().length > 0){
 			// Expand partials
-			String tmp = plugin.expandName( call.getArg(0) );
+			String tmp = Oracle.expandName( call.getArg(0) );
 			if(tmp != null){
 	    		username = tmp;
 	    	}
@@ -50,7 +34,7 @@ public class SeenCommand implements SubHandler {
 		}
 		
 		// Check for alt accounts in async thread
-    	plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable(){
+    	new Thread(new Runnable(){
 			public void run(){
 		
 				call.getPlayer().sendMessage( Oracle.messenger.playerHeaderMsg( "Join & Last Seen Dates for " + player.getName() ) );
@@ -61,6 +45,6 @@ public class SeenCommand implements SubHandler {
 				    call.getPlayer().sendMessage( Oracle.messenger.playerError( e.getMessage() ) );
 				}
 			}
-    	});
+    	}).start();
 	}
 }

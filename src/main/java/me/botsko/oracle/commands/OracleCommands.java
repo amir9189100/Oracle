@@ -6,7 +6,6 @@ import me.botsko.oracle.commandlibs.Executor;
 import me.botsko.oracle.commandlibs.SubHandler;
 
 public class OracleCommands extends Executor {
-
 	
 	/**
 	 * 
@@ -16,7 +15,6 @@ public class OracleCommands extends Executor {
 		super( oracle, "command", "oracle" );
 		setupCommands();
 	}
-	
 
 	/**
 	 * 
@@ -31,7 +29,7 @@ public class OracleCommands extends Executor {
 		addSub("alts", "oracle.alts")
 		.setMinArgs(1)
 		.allowConsole()
-		.setHandler(new AltsCommand( oracle ));
+		.setHandler(new AltsCommand());
 		
 		/**
 		 * /ban
@@ -39,7 +37,7 @@ public class OracleCommands extends Executor {
 		addSub("ban", "oracle.ban")
 		.setMinArgs(1)
 		.allowConsole()
-		.setHandler(new BanCommand( oracle ));
+		.setHandler(new BanCommand());
 		
 		/**
 		 * /ban
@@ -54,7 +52,7 @@ public class OracleCommands extends Executor {
 		 */
 		addSub("lookup", "oracle.lookup")
 		.allowConsole()
-		.setHandler(new LookupCommand( oracle ));
+		.setHandler(new LookupCommand());
 		
 		/**
 		 * /ison
@@ -62,14 +60,14 @@ public class OracleCommands extends Executor {
 		addSub("ison", "oracle.ison")
 		.setMinArgs(1)
 		.allowConsole()
-		.setHandler(new IsonCommand( oracle ));
+		.setHandler(new IsonCommand());
 		
 		/**
 		 * /played
 		 */
 		addSub("played", "oracle.played")
 		.allowConsole()
-		.setHandler(new PlayedCommand( oracle ));
+		.setHandler(new PlayedCommand());
 		
 		/**
 		 * /playhist
@@ -83,15 +81,8 @@ public class OracleCommands extends Executor {
 		 */
 		addSub("seen", "oracle.seen")
 		.allowConsole()
-		.setHandler(new SeenCommand( oracle ));
-		
-		/**
-		 * /stats
-		 */
-		addSub("stats", "oracle.stats")
-		.allowConsole()
-		.setHandler(new StatsCommand());
-		
+		.setHandler(new SeenCommand());
+
 		/**
 		 * /unban
 		 */

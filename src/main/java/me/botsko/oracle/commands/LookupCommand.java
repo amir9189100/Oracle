@@ -11,29 +11,13 @@ import me.botsko.oracle.utils.BanUtil;
 public class LookupCommand implements SubHandler {
 	
 	/**
-	 * 
-	 */
-	private Oracle plugin;
-	
-	
-	/**
-	 * 
-	 * @param plugin
-	 * @return 
-	 */
-	public LookupCommand(Oracle plugin) {
-		this.plugin = plugin;
-	}
-	
-	
-	/**
 	 * Handle the command
 	 */
 	public void handle( final CallInfo call ){
 		
 		String username = call.getSender().getName();
 		if( call.getArgs().length > 0 ){
-			username = plugin.expandName( call.getArg(0) );
+			username = Oracle.expandName( call.getArg(0) );
 		}
 		
 		final OfflinePlayer player = Bukkit.getOfflinePlayer(username);
@@ -43,9 +27,8 @@ public class LookupCommand implements SubHandler {
 			return;
 		}
 		
-		
 		// Check for alt accounts in async thread
-    	plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable(){
+    	new Thread(new Runnable(){
 			public void run(){
 
 				try {
@@ -55,6 +38,6 @@ public class LookupCommand implements SubHandler {
 					call.getSender().sendMessage(Oracle.messenger.playerHeaderMsg( call.getArg(0) + " is banned. Reason: " + e.getMessage() + "."));
 				}
 			}
-    	});
+    	}).start();
 	}
 }
