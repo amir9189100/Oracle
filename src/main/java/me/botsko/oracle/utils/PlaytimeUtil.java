@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.LinkedHashMap;
 
 import org.bukkit.OfflinePlayer;
 
@@ -74,34 +75,45 @@ public class PlaytimeUtil {
 		return playtime;
 	}
 	
-	
-//	/**
-//	 * 
-//	 * @param person
-//	 * @param account_name
-//	 */
-//	public static HashMap<Playtime,String> getPlayerPlaytimeHistory( String username ){
-//		Connection conn = null;
-//		PreparedStatement s = null;
-//		try {
-//            
-//			conn = Oracle.dbc();
-//			
-//    		s = conn.prepareStatement ("SELECT DATE_FORMAT(player_join,'%Y-%m-%d') as playdate, SUM(playtime) as playtime FROM oracle_joins WHERE player = ? GROUP BY DATE_FORMAT(player_join,'%Y-%m-%d') ORDER BY player_join DESC LIMIT 7;");
-//    		s.setString(1, username);
-//    		s.executeQuery();
-//    		ResultSet rs = s.getResultSet();
-//
-//    		HashMap<Playtime,String> scores = new HashMap<Playtime, String>();
-//    		while(rs.next()){
-//    			scores.put( new Playtime(rs.getInt("playtime")), rs.getString("playdate") );
-//			}
-//		} catch (SQLException e){
-//            e.printStackTrace();
-//        } finally {
-//        	if(s != null) try { s.close(); } catch (SQLException e) {}
-//        	if(conn != null) try { conn.close(); } catch (SQLException e) {}
-//        }
-//		return null;
-//	}
+	/**
+	 * 
+	 * @param person
+	 * @param account_name
+	 * @throws Exception 
+	 */
+	public static LinkedHashMap<Playtime,String> getPlayerPlaytimeHistory( OfflinePlayer player ) throws Exception{
+		Connection conn = null;
+		PreparedStatement s = null;
+		LinkedHashMap<Playtime,String> playdates = new LinkedHashMap<Playtime, String>();
+		try {
+		    
+		    // Get Player ID
+            PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( player.getName() );
+            if( pluginPlayer == null ){
+                throw new Exception("Player has never played on this server.");
+            }
+            
+			conn = Oracle.dbc();
+    		s = conn.prepareStatement(""
+    		        + "SELECT DATE_FORMAT(player_join,'%Y-%m-%d') as playdate, "
+    		        + "SUM(playtime) as playtime "
+    		        + "FROM oracle_joins "
+    		        + "WHERE player_id = ? "
+    		        + "GROUP BY DATE_FORMAT(player_join,'%Y-%m-%d') "
+    		        + "ORDER BY player_join DESC LIMIT 7");
+    		s.setInt(1,pluginPlayer.getId());
+    		s.executeQuery();
+    		ResultSet rs = s.getResultSet();
+    		
+    		while(rs.next()){
+    		    playdates.put( new Playtime(rs.getInt("playtime")), rs.getString("playdate") );
+			}
+		} catch (SQLException e){
+            e.printStackTrace();
+        } finally {
+        	if(s != null) try { s.close(); } catch (SQLException e) {}
+        	if(conn != null) try { conn.close(); } catch (SQLException e) {}
+        }
+		return playdates;
+	}
 }
