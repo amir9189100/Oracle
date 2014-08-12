@@ -33,6 +33,9 @@ commands:
    played:
       description: Shows total playtime for player
       usage: /played [player]
+   playhist:
+      description: Shows recent playtime for a player
+      usage: /playhist [player]
    warn:
       description: File a warning for a player
       usage: /warn [player] [msg]

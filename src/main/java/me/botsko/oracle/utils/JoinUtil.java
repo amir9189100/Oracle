@@ -304,7 +304,7 @@ public class JoinUtil {
     		        + "JOIN "
     		            + "(SELECT DISTINCT i.ip_id FROM oracle_joins j "
     		            + "LEFT JOIN oracle_ips i ON i.ip_id = j.ip_id "
-    		            + "WHERE j.player_id = ?"
+    		            + "WHERE j.player_id = ? "
     		            + "AND j.ip_id IS NOT NULL "
     		            + "AND i.ip_id IS NOT NULL) "
     		            + "A ON A.ip_id = j.ip_id "

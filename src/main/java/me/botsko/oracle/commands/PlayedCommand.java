@@ -42,6 +42,6 @@ public class PlayedCommand implements SubHandler {
                     call.getSender().sendMessage( Oracle.messenger.playerError( e.getMessage() ) );
                 }
 			}
-    	});
+    	}).start();
 	}
 }

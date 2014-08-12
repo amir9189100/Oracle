@@ -126,6 +126,7 @@ public class Oracle extends JavaPlugin {
 				getCommand("alts").setExecutor( (CommandExecutor) new OracleCommands(this) );
 				getCommand("seen").setExecutor( (CommandExecutor) new OracleCommands(this) );
 				getCommand("played").setExecutor( (CommandExecutor) new OracleCommands(this) );
+				getCommand("playhist").setExecutor( (CommandExecutor) new OracleCommands(this) );
 				getCommand("stats").setExecutor( (CommandExecutor) new OracleCommands(this) );
 			}
 			if( getConfig().getBoolean("oracle.warnings.enabled") ){
