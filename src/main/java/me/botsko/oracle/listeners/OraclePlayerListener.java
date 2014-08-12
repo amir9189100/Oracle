@@ -5,9 +5,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import me.botsko.elixr.TypeUtils;
 import me.botsko.oracle.Oracle;
 import me.botsko.oracle.events.OracleFirstTimePlayerEvent;
-import me.botsko.oracle.utils.Alt;
 import me.botsko.oracle.utils.BanUtil;
 import me.botsko.oracle.utils.JoinUtil;
 import me.botsko.oracle.utils.Playtime;
@@ -83,7 +83,8 @@ public class OraclePlayerListener implements Listener {
                     try {
                         playtime = PlaytimeUtil.getPlaytime(player);
                         Oracle.playtimeHours.put(player,playtime.getHours());
-                    } catch ( Exception e ) {
+                    } catch ( Exception e ){
+                        e.printStackTrace();
                         return;
                     }
     			}
@@ -151,27 +152,21 @@ public class OraclePlayerListener implements Listener {
     	// Check for alt accounts in async thread
     	new Thread(new Runnable(){
 			public void run(){
-
-		    	List<Alt> alt_accts;
 				try {
 					
-					alt_accts = JoinUtil.getPlayerAlts( player );
+					List<String> alts = JoinUtil.getPlayerAlts( player );
 					
-					if( alt_accts.isEmpty() ) return;
+					if( alts.isEmpty() ) return;
 					
-					String alts_list = "";
-					int i = 1;
-					for(Alt alt : alt_accts){
-						alts_list += alt.username + (i == alt_accts.size() ? "" : ", ");
-						i++;
-					}
-					for(Player pl: plugin.getServer().getOnlinePlayers()) {
+					String altList = TypeUtils.join( alts, ", " );
+					for(Player pl: plugin.getServer().getOnlinePlayers()){
 			    		if(pl.hasPermission("oracle.alerts.alt")){
-			    			pl.sendMessage( Oracle.messenger.playerMsg( player.getName() + "'s alts: " + alts_list) );
+			    			pl.sendMessage( Oracle.messenger.playerMsg( player.getName() + "'s alts: " + altList) );
 			    		}
 			    	}
 					
-				} catch (Exception e) {
+				} catch (Exception e){
+				    e.printStackTrace();
 				}
 			}
     	}).start();
@@ -210,7 +205,8 @@ public class OraclePlayerListener implements Listener {
 			public void run(){
 		        try {
 					JoinUtil.registerPlayerQuit( event.getPlayer() );
-				} catch (Exception e) {
+				} catch (Exception e){
+				    e.printStackTrace();
 				}
 			}
     	}).start();

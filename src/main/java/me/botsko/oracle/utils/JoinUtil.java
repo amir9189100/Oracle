@@ -283,8 +283,8 @@ public class JoinUtil {
 	 * @param account_name
 	 * @throws Exception 
 	 */
-	public static List<Alt> getPlayerAlts( OfflinePlayer player ) throws Exception{
-		ArrayList<Alt> accounts = new ArrayList<Alt>();
+	public static List<String> getPlayerAlts( OfflinePlayer player ) throws Exception{
+		List<String> accounts = new ArrayList<String>();
 		Connection conn = null;
 		PreparedStatement s = null;
 		ResultSet rs = null;
@@ -299,19 +299,25 @@ public class JoinUtil {
 			conn = Oracle.dbc();
 			
 			// Pull a list of all unique IPs this player has used
-    		s = conn.prepareStatement ("SELECT DISTINCT p.player, i.ip " +
-    				"FROM oracle_joins j " +
-    				"JOIN oracle_ips i ON i.ip_id = j.ip_id " +
-    				"JOIN oracle_joins AS joins2 ON joins2.ip_id = i.ip_id AND joins2.player_id  != ? " +
-    				"JOIN oracle_players AS p ON joins2.player_id = p.player_id " +
-    				"WHERE j.player_id = ?");
+    		s = conn.prepareStatement (""
+    		        + "SELECT DISTINCT p.player FROM oracle_joins j "
+    		        + "JOIN "
+    		            + "(SELECT DISTINCT i.ip_id FROM oracle_joins j "
+    		            + "LEFT JOIN oracle_ips i ON i.ip_id = j.ip_id "
+    		            + "WHERE j.player_id = ?"
+    		            + "AND j.ip_id IS NOT NULL "
+    		            + "AND i.ip_id IS NOT NULL) "
+    		            + "A ON A.ip_id = j.ip_id "
+	                + "LEFT JOIN oracle_players p ON p.player_id = j.player_id "
+	                + "LEFT JOIN oracle_ips i ON j.ip_id = i.ip_id "
+	                + "WHERE A.ip_id IS NOT NULL "
+	                + "ORDER BY p.player ");
     		s.setInt(1, pluginPlayer.getId());
-    		s.setInt(2, pluginPlayer.getId());
     		s.executeQuery();
     		rs = s.getResultSet();
     		
     		while(rs.next()){
-	    		accounts.add( new Alt(rs.getString("ip"), rs.getString("player")) );
+	    		accounts.add( rs.getString("player") );
     		}   
 		} catch (SQLException e) {
             e.printStackTrace();
