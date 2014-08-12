@@ -14,21 +14,6 @@ public class BungeeCord implements PluginMessageListener {
 	/**
 	 * 
 	 */
-	Oracle plugin;
-	
-	
-	/**
-	 * 
-	 * @param plugin
-	 */
-	public BungeeCord( Oracle plugin ){
-		this.plugin = plugin;
-	}
-
-	
-	/**
-	 * 
-	 */
     public void onPluginMessageReceived( String channel, Player player, byte[] message ) {
  
         if (channel.equals("BungeeCord")) {
@@ -45,7 +30,7 @@ public class BungeeCord implements PluginMessageListener {
         					BanUtil.ipMayJoin( ip );
         				} catch (Exception e){
         					player.kickPlayer( "Banned. " + e.getMessage() );
-        					plugin.log( "Rejecting player login due to ban. For: " + player.getName() );
+        					Oracle.log( "Rejecting player login due to ban. For: " + player.getName() );
         				}
                     	
 						JoinUtil.setPlayerSessionIp( player, ip );

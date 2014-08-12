@@ -29,12 +29,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
 public class OraclePlayerListener implements Listener {
-	
-	/**
-	 * 
-	 */
+
 	protected Oracle plugin;
-	
 	
 	/**
 	 * 
@@ -43,7 +39,6 @@ public class OraclePlayerListener implements Listener {
 	public OraclePlayerListener( Oracle plugin ){
 		this.plugin = plugin;
 	}
-	
 	
 	/**
 	 * 
@@ -55,7 +50,7 @@ public class OraclePlayerListener implements Listener {
         Player player = event.getPlayer();
         String cmd = event.getMessage();
 
-        if( !plugin.getConfig().getBoolean("oracle.log-command-use-to-console") ) return;
+        if( !Oracle.config.getBoolean("oracle.log-command-use-to-console") ) return;
         
     	int x = player.getLocation().getBlockX();
         int y = player.getLocation().getBlockY();
@@ -63,7 +58,6 @@ public class OraclePlayerListener implements Listener {
         Oracle.log( "[Cmd] " + player.getName() + " " + cmd + " @" + player.getWorld().getName() + " " + x + " " + y + " " + z);
         
     }
-	
 	
 	/**
 	 * 
@@ -76,10 +70,10 @@ public class OraclePlayerListener implements Listener {
         final String username = player.getName();
         
         // Track joins
-        if( plugin.getConfig().getBoolean("oracle.joins.enabled") ){
+        if( Oracle.config.getBoolean("oracle.joins.enabled") ){
 
 	        // Run insert record in async thread
-        	plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable(){
+            new Thread(new Runnable(){
     			public void run(){
     				
     				JoinUtil.registerPlayerJoin( player, plugin.getServer().getOnlinePlayers().size() );
@@ -93,10 +87,10 @@ public class OraclePlayerListener implements Listener {
                         return;
                     }
     			}
-        	});
+        	}).start();
 	        
 	        // Determine if we're using bungeecord as a proxy
-	        if( plugin.getConfig().getBoolean("oracle.joins.use-bungeecord") ){
+	        if( Oracle.config.getBoolean("oracle.joins.use-bungeecord") ){
 		        // Pass the information from bungee so we properly track the ip
 		        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 		            public void run() {
@@ -121,15 +115,14 @@ public class OraclePlayerListener implements Listener {
         }
         
         // Track warnings
-        if( plugin.getConfig().getBoolean("oracle.warnings.enabled") ){
-        	 plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-		            public void run() {
-		            	WarningUtil.alertStaffOnWarnLimit( player );
-		            }
-        	 });
+        if( Oracle.config.getBoolean("oracle.warnings.enabled") ){
+             new Thread(new Runnable(){
+                public void run(){
+                    WarningUtil.alertStaffOnWarnLimit( player );
+		        }
+        	 }).start();
         }
     }
-    
     
     /**
      * 
@@ -139,24 +132,24 @@ public class OraclePlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerFirstJoin(final OracleFirstTimePlayerEvent event){
     	
-    	if( !plugin.getConfig().getBoolean("oracle.joins.enabled") ) return;
+    	if( !Oracle.config.getBoolean("oracle.joins.enabled") ) return;
     	
     	final Player player = event.getPlayer();
     	
     	// Give them a guide book
-    	if( plugin.getConfig().getBoolean("oracle.guidebook.enabled") ){
+    	if( Oracle.config.getBoolean("oracle.guidebook.enabled") ){
 	        ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
 	        BookMeta meta = (BookMeta) book.getItemMeta();
-	        meta.setTitle( plugin.getConfig().getString("oracle.guidebook.title") );
-	        meta.setAuthor( plugin.getConfig().getString("oracle.guidebook.author") );
-	        List<String> pages = (List<String>) plugin.getConfig().getList("oracle.guidebook.contents");
+	        meta.setTitle( Oracle.config.getString("oracle.guidebook.title") );
+	        meta.setAuthor( Oracle.config.getString("oracle.guidebook.author") );
+	        List<String> pages = (List<String>) Oracle.config.getList("oracle.guidebook.contents");
 	        meta.setPages( pages );
 	        book.setItemMeta(meta);
 			player.getInventory().addItem( book );
     	}
     	
     	// Check for alt accounts in async thread
-    	plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable(){
+    	new Thread(new Runnable(){
 			public void run(){
 
 		    	List<Alt> alt_accts;
@@ -181,9 +174,8 @@ public class OraclePlayerListener implements Listener {
 				} catch (Exception e) {
 				}
 			}
-    	});
+    	}).start();
     }
-    
     
     /**
      * 
@@ -192,25 +184,19 @@ public class OraclePlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerLogin(final PlayerLoginEvent event){
 
-    	if( !plugin.getConfig().getBoolean("oracle.bans.enabled") ) return;
+    	if( !Oracle.config.getBoolean("oracle.bans.enabled") ) return;
     	
     	final Player player = event.getPlayer();
-    	
-    	// sync can't kick this way, not a huge need atm
-//    	plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable(){
-//			public void run(){
-		    	try {
-		    		final String ip = event.getAddress().getHostAddress().toString();
-					BanUtil.playerMayJoin( player, ip );
-				} catch (Exception e){
-					event.setKickMessage( "Banned. " + e.getMessage() );
-					event.setResult( Result.KICK_OTHER );
-					Oracle.log( "Rejecting player login due to ban. For: " + player.getName() );
-				}
-//			}
-//    	});
+
+    	try {
+    		final String ip = event.getAddress().getHostAddress().toString();
+			BanUtil.playerMayJoin( player, ip );
+		} catch (Exception e){
+			event.setKickMessage( "Banned. " + e.getMessage() );
+			event.setResult( Result.KICK_OTHER );
+			Oracle.log( "Rejecting player login due to ban. For: " + player.getName() );
+		}
     }
-    
     
     /**
      * 
@@ -218,18 +204,17 @@ public class OraclePlayerListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerQuit(final PlayerQuitEvent event){
-    	if( !plugin.getConfig().getBoolean("oracle.joins.enabled") ) return;
+    	if( !Oracle.config.getBoolean("oracle.joins.enabled") ) return;
     	
-    	plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable(){
+    	new Thread(new Runnable(){
 			public void run(){
 		        try {
 					JoinUtil.registerPlayerQuit( event.getPlayer() );
 				} catch (Exception e) {
 				}
 			}
-    	});
+    	}).start();
     }
-
     
     /**
 	 * 
@@ -240,7 +225,7 @@ public class OraclePlayerListener implements Listener {
 		
 		Player player = event.getPlayer();
 		
-		if( !plugin.getConfig().getBoolean("oracle.kick-minechat") ) return;
+		if( !Oracle.config.getBoolean("oracle.kick-minechat") ) return;
 		
 		if( event.getMessage().matches("connected.*MineChat") ){
 			player.kickPlayer( "MineChat is not allowed... sorry" );

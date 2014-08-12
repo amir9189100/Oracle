@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 
 public class PlaytimeMonitor implements Runnable {
 
-	
 	/**
 	 * 
 	 */

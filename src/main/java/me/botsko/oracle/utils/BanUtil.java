@@ -15,7 +15,6 @@ import me.botsko.oracle.players.PluginPlayer;
 
 public class BanUtil {
 	
-	
 	/**
 	 * 
 	 * @param person
@@ -54,7 +53,6 @@ public class BanUtil {
         }
 	}
 	
-	
 	/**
 	 * 
 	 * @param person
@@ -88,7 +86,6 @@ public class BanUtil {
         	if(conn != null) try { conn.close(); } catch (SQLException e) {}
         }
 	}
-	
 	
 	/**
 	 * 
@@ -139,7 +136,6 @@ public class BanUtil {
         }
 	}
 	
-	
 	/**
 	 * 
 	 * @param person
@@ -181,7 +177,6 @@ public class BanUtil {
         }
 	}
 	
-	
 	/**
 	 * 
 	 * @param player
@@ -190,7 +185,6 @@ public class BanUtil {
 	public static void playerMayJoin( OfflinePlayer player ) throws Exception{
 		playerMayJoin( player, null );
 	}
-	
 	
 	/**
 	 * 
@@ -239,7 +233,6 @@ public class BanUtil {
         	if(conn != null) try { conn.close(); } catch (SQLException e) {}
         }
 	}
-	
 	
 	/**
 	 * 

@@ -9,7 +9,6 @@ import me.botsko.oracle.Oracle;
 
 public class ReportsUtil {
 
-	
 	/**
 	 * 
 	 * @return
@@ -39,7 +38,6 @@ public class ReportsUtil {
 	    }
 		return total;
 	}
-	
 	
 	/**
 	 * 

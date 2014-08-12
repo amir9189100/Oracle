@@ -9,7 +9,6 @@ public class OraclePlaytimeMilestoneEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     private final Player player;
     private final int newHourCount;
-    
 
     /**
      * 
@@ -23,15 +22,13 @@ public class OraclePlaytimeMilestoneEvent extends Event {
     	this.newHourCount = newHourCount;
     }
     
-    
 	/**
 	 * @return the player
 	 */
 	public Player getPlayer() {
 		return player;
 	}
-	
-	
+
 	/**
 	 * 
 	 * @return
@@ -39,7 +36,6 @@ public class OraclePlaytimeMilestoneEvent extends Event {
 	public int getNewHourCount(){
 		return newHourCount;
 	}
-	
 
 	/**
      * Required by bukkit for proper event handling.
@@ -47,8 +43,7 @@ public class OraclePlaytimeMilestoneEvent extends Event {
     public HandlerList getHandlers() {
         return handlers;
     }
- 
-    
+
     /**
      * Required by bukkit for proper event handling.
      * @return

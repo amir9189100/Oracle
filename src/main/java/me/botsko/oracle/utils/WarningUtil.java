@@ -18,7 +18,6 @@ import org.bukkit.entity.Player;
 
 public class WarningUtil {
 	
-	
 	/**
 	 * Alert staff to a player with three or more warnings
 	 * @param plugin
@@ -34,7 +33,6 @@ public class WarningUtil {
         	}
         }
 	}
-	
 	
 	/**
 	 * 
@@ -76,7 +74,6 @@ public class WarningUtil {
         }
 	}
 	
-	
 	/**
 	 * 
 	 * @param person
@@ -111,7 +108,6 @@ public class WarningUtil {
         }
 		return warnings;
 	}
-	
 	
 	/**
 	 * 

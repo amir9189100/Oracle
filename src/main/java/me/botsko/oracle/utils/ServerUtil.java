@@ -10,14 +10,12 @@ import me.botsko.oracle.Oracle;
 
 public class ServerUtil {
 	
-	
 	/**
 	 * 
 	 */
 	public static int lookupServer(){
 		return Oracle.oracleServer;
 	}
-	
 	
 	/**
 	 * 
@@ -47,7 +45,6 @@ public class ServerUtil {
     		}
 		} catch (SQLException e) {
 		    e.printStackTrace();
-//        	handleDatabaseException( e );
         } finally {
         	if(rs != null) try { rs.close(); } catch (SQLException e) {}
         	if(s != null) try { s.close(); } catch (SQLException e) {}
@@ -55,7 +52,6 @@ public class ServerUtil {
         }
 		return 0;
 	}
-	
 	
 	/**
 	 * Saves a player name to the database, and adds the id to the cache hashmap

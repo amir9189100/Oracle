@@ -15,7 +15,6 @@ import me.botsko.oracle.players.PluginPlayer;
 
 public class PlaytimeUtil {
 
-	
 	/**
 	 * 
 	 * @param person

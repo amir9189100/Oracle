@@ -41,7 +41,6 @@ public class JoinUtil {
     		}
 		} catch (SQLException e){
 		    e.printStackTrace();
-//        	handleDatabaseException( e );
         } finally {
         	if(rs != null) try { rs.close(); } catch (SQLException e) {}
         	if(s != null) try { s.close(); } catch (SQLException e) {}
@@ -126,7 +125,6 @@ public class JoinUtil {
         }
 	}
 	
-	
 	/**
 	 * Updates a current play session IP if received separately from the join event.
 	 * (Primarily for BungeeCord use)
@@ -160,7 +158,6 @@ public class JoinUtil {
         	if(conn != null) try { conn.close(); } catch (SQLException e) {}
         }
 	}
-	
 	
 	/**
 	 * End a play session for the player
@@ -209,7 +206,6 @@ public class JoinUtil {
 		}
 	}
 	
-	
 	/**
 	 * 
 	 * @param person
@@ -248,7 +244,6 @@ public class JoinUtil {
         }
 	}
 	
-	
 	/**
 	 * 
 	 * @param person
@@ -281,7 +276,6 @@ public class JoinUtil {
         	if(conn != null) try { conn.close(); } catch (SQLException e) {}
         }
 	}
-	
 	
 	/**
 	 * 
@@ -317,9 +311,7 @@ public class JoinUtil {
     		rs = s.getResultSet();
     		
     		while(rs.next()){
-
 	    		accounts.add( new Alt(rs.getString("ip"), rs.getString("player")) );
-				
     		}   
 		} catch (SQLException e) {
             e.printStackTrace();

@@ -7,7 +7,6 @@ public class Playtime {
 	public int minutes;
 	public int seconds;
 
-
 	/**
 	 * 
 	 * @param playtime
@@ -16,14 +15,12 @@ public class Playtime {
 		splitToComponentTimes( playtime );
 	}
 	
-
 	/**
 	 * @return the hours
 	 */
 	public int getHours() {
 		return hours;
 	}
-
 
 	/**
 	 * @return the minutes
@@ -32,14 +29,12 @@ public class Playtime {
 		return minutes;
 	}
 
-
 	/**
 	 * @return the seconds
 	 */
 	public int getSeconds() {
 		return seconds;
 	}
-	
 	
 	/**
      * Convert seconds into hours/mins/secs

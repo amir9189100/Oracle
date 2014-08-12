@@ -13,7 +13,6 @@ import org.bukkit.ChatColor;
 
 public class AnnouncementUtil {
 
-	
 	/**
 	 * 
 	 * @param person

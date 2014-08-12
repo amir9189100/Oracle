@@ -1,11 +1,12 @@
 package me.botsko.oracle;
 
 
+import me.botsko.elixr.ConfigBase;
+
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 
 public class OracleConfig extends ConfigBase {
-	
 	
 	/**
 	 * 
@@ -14,7 +15,6 @@ public class OracleConfig extends ConfigBase {
 	public OracleConfig(Plugin plugin) {
 		super(plugin);
 	}
-	
 	
 	/**
 	 * 
@@ -26,7 +26,6 @@ public class OracleConfig extends ConfigBase {
 		
 		// set defaults
 		config.addDefault("oracle.debug", false);
-//		config.addDefault("oracle.language", "en-us");
 		
 		config.addDefault("oracle.server-alias", "bukkit-main");
 		
@@ -46,7 +45,6 @@ public class OracleConfig extends ConfigBase {
 		config.addDefault("oracle.joins.enabled", true);
 		config.addDefault("oracle.joins.use-bungeecord", false);
 		config.addDefault("oracle.warnings.enabled", true);
-		
 		
 		config.addDefault("oracle.guidebook.enabled", false);
 		config.addDefault("oracle.guidebook.author", "viveleroi");

@@ -8,7 +8,6 @@ public class OracleFirstTimePlayerEvent extends Event {
 	
     private static final HandlerList handlers = new HandlerList();
     private final Player player;
-    
 
     /**
      * 
@@ -20,15 +19,13 @@ public class OracleFirstTimePlayerEvent extends Event {
     public OracleFirstTimePlayerEvent( Player player ){
     	this.player = player;
     }
-    
-    
+
 	/**
 	 * @return the player
 	 */
 	public Player getPlayer() {
 		return player;
 	}
-	
 
 	/**
      * Required by bukkit for proper event handling.
@@ -36,7 +33,6 @@ public class OracleFirstTimePlayerEvent extends Event {
     public HandlerList getHandlers() {
         return handlers;
     }
- 
     
     /**
      * Required by bukkit for proper event handling.

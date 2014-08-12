@@ -14,7 +14,6 @@ import me.botsko.oracle.players.PluginPlayer;
 
 public class SeenUtil {
 	
-	
 	/**
 	 * 
 	 * @param person
@@ -53,7 +52,6 @@ public class SeenUtil {
         }
 		return joined;
 	}
-	
 	
 	/**
 	 * 

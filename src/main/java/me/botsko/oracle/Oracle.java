@@ -65,13 +65,6 @@ public class Oracle extends JavaPlugin {
 		// Loaf config
 		loadConfig();
 		
-//		if(getConfig().getBoolean("oracle.notify-newer-versions")){
-//			String notice = UpdateNotification.checkForNewerBuild(plugin_version);
-//			if(notice != null){
-//				log(notice);
-//			}
-//		}'
-		
 		// init db
 		pool = initDbPool();
 		Connection test_conn = dbc();
@@ -117,7 +110,7 @@ public class Oracle extends JavaPlugin {
 			 */
 			if( getConfig().getBoolean("oracle.joins.use-bungeecord") ){
 				this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-				this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new BungeeCord(this));
+				this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new BungeeCord());
 			}
 			
 			// Add commands
