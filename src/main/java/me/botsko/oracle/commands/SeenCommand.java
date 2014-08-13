@@ -23,7 +23,7 @@ public class SeenCommand implements SubHandler {
 	    		username = tmp;
 	    	}
 		} else {
-			username = call.getPlayer().getName();
+			username = call.getSender().getName();
 		}
 		
 		final OfflinePlayer player = Bukkit.getOfflinePlayer(username);
@@ -36,13 +36,12 @@ public class SeenCommand implements SubHandler {
 		// Check for alt accounts in async thread
     	new Thread(new Runnable(){
 			public void run(){
-		
-				call.getPlayer().sendMessage( Oracle.messenger.playerHeaderMsg( "Join & Last Seen Dates for " + player.getName() ) );
+				call.getSender().sendMessage( Oracle.messenger.playerHeaderMsg( player.getName() ) );
 				try {
 					call.getSender().sendMessage( Oracle.messenger.playerMsg("Joined " + SeenUtil.getPlayerFirstSeen(player)) );
 					call.getSender().sendMessage( Oracle.messenger.playerMsg("Last Seen " + SeenUtil.getPlayerLastSeen(player)) );
 				} catch (Exception e){
-				    call.getPlayer().sendMessage( Oracle.messenger.playerError( e.getMessage() ) );
+				    call.getSender().sendMessage( Oracle.messenger.playerError( e.getMessage() ) );
 				}
 			}
     	}).start();

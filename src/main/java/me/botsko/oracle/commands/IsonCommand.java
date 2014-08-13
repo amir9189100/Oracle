@@ -22,7 +22,7 @@ public class IsonCommand implements SubHandler {
 	    		username = tmp;
 	    	}
 		} else {
-			username = call.getPlayer().getName();
+			username = call.getSender().getName();
 		}
 		
 		if(isOnline( username )){
