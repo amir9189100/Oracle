@@ -49,6 +49,9 @@ public class BanCommand implements SubHandler {
 			        p.sendMessage( Oracle.messenger.playerHeaderMsg( call.getSender().getName() + " banned " + username + " for: " + reason ) );
 			    }
 			}
+			if( !(call.getSender() instanceof Player) ){
+			    call.getSender().sendMessage( Oracle.messenger.playerHeaderMsg( call.getSender().getName() + " banned " + username + " for: " + reason ) );
+			}
 		} catch (Exception e) {
 			call.getSender().sendMessage( Oracle.messenger.playerError( e.getMessage() ) );
 		}
