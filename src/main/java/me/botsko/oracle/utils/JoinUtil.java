@@ -291,7 +291,7 @@ public class JoinUtil {
 		try {
 			
 			// Insert/Get Player ID
-		    PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( player.getName() );
+		    PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( player );
             if( pluginPlayer == null ){
                 throw new Exception("Could not find player");
             }

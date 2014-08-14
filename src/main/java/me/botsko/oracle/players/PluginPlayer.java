@@ -2,7 +2,7 @@ package me.botsko.oracle.players;
 
 import java.util.UUID;
 
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 
 public class PluginPlayer {
     
@@ -16,7 +16,7 @@ public class PluginPlayer {
      * @param playerId
      * @param player
      */
-    public PluginPlayer( int playerId, Player player ){
+    public PluginPlayer( int playerId, OfflinePlayer player ){
         this( playerId, player.getUniqueId(), player.getName() );
     }
     

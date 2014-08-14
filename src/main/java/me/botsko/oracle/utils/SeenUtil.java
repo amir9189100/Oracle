@@ -28,7 +28,7 @@ public class SeenUtil {
 		try {
 			
 			// Insert/Get Player ID
-		    PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( player.getName() );
+		    PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( player );
 		    if( pluginPlayer == null ){
 		        throw new Exception("Player has never played on this server.");
 		    }
@@ -67,7 +67,7 @@ public class SeenUtil {
 		try {
 			
 			// Insert/Get Player ID
-		    PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( player.getName() );
+		    PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( player );
 		    if( pluginPlayer == null ){
                 throw new Exception("Player has never played on this server.");
             }

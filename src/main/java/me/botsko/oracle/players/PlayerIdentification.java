@@ -11,10 +11,10 @@ import me.botsko.elixr.TypeUtils;
 import me.botsko.oracle.Oracle;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 public class PlayerIdentification {
-
 
     /**
      * Loads `oracle_players` ID for a real player into our cache.
@@ -24,7 +24,7 @@ public class PlayerIdentification {
      *
      * @param player
      */
-    public static PluginPlayer cacheOraclePlayer( final Player player ){
+    public static PluginPlayer cacheOraclePlayer( final OfflinePlayer player ){
 
         // Lookup the player
         PluginPlayer pluginPlayer = getOraclePlayer( player );
@@ -38,34 +38,6 @@ public class PlayerIdentification {
         return pluginPlayer;
 
     }
-    
-
-    /**
-     * Returns a `oracle_players` ID for the described player name. If
-     * one cannot be found, returns 0.
-     *
-     * Used by the recorder in determining proper foreign key
-     *
-     * @param playerName
-     * @return
-     */
-    public static PluginPlayer getOraclePlayer( String playerName ){
-
-        Player player = Bukkit.getPlayer(playerName);
-
-        if( player != null ) return getOraclePlayer( player );
-
-        // Player not online, we need to go to cache
-        PluginPlayer pluginPlayer = lookupByName( playerName );
-
-        // Player found! Return the id
-        if( pluginPlayer != null ) return pluginPlayer;
-
-        // No player exists! We must create one
-        return null;
-
-    }
-
 
     /**
      * Returns a `oracle_players` ID for the described player object. If
@@ -76,14 +48,9 @@ public class PlayerIdentification {
      * @param playerName
      * @return
      */
-    public static PluginPlayer getOraclePlayer( Player player ){
+    public static PluginPlayer getOraclePlayer( OfflinePlayer player ){
 
         if( player.getUniqueId() == null ){
-            // If they have a name, we can attempt to find them that way
-            if( player.getName() != null && !player.getName().trim().isEmpty() ){
-                return getOraclePlayer( player.getName() );
-            }
-            // No name, no UUID, no service.
             return null;
         }
 
@@ -97,14 +64,9 @@ public class PlayerIdentification {
         pluginPlayer = lookupByUUID( player.getUniqueId() );
         if( pluginPlayer != null ) return pluginPlayer;
 
-        // Still not found, try looking them up by name
-        pluginPlayer = lookupByName( player.getName() );
-        if( pluginPlayer != null ) return pluginPlayer;
-
         return null;
 
     }
-
 
     /**
      * Compares the known player to the cached data. If there's a difference
@@ -119,7 +81,7 @@ public class PlayerIdentification {
      * @param pluginPlayer
      * @return
      */
-    protected static PluginPlayer comparePlayerToCache( Player player, PluginPlayer pluginPlayer ){
+    protected static PluginPlayer comparePlayerToCache( OfflinePlayer player, PluginPlayer pluginPlayer ){
 
         // Compare for username differences, update database
         if( !player.getName().equals( pluginPlayer.getName() ) ){
@@ -141,7 +103,6 @@ public class PlayerIdentification {
 
     }
 
-
     /**
      * Converts UUID to a string ready for use against database
      * @param player
@@ -149,7 +110,6 @@ public class PlayerIdentification {
     protected static String uuidToDbString( UUID id ){
         return id.toString().replace("-", "");
     }
-
 
     /**
      * Converts UUID to a string ready for use against database
@@ -165,7 +125,6 @@ public class PlayerIdentification {
         completeUuid = completeUuid.toLowerCase();
         return UUID.fromString(completeUuid);
     }
-
 
     /**
      * Saves a real player's UUID and current Username to the `oracle_players`
@@ -206,7 +165,6 @@ public class PlayerIdentification {
         return pluginPlayer;
     }
 
-
     /**
      * Saves a player's UUID to the oracle_players table. We cache the current username
      * as well.
@@ -232,36 +190,6 @@ public class PlayerIdentification {
             if(conn != null) try { conn.close(); } catch (SQLException e) {}
         }
     }
-
-
-    /**
-     * Loads `oracle_players` ID for a player into our cache.
-     */
-    protected static PluginPlayer lookupByName( String playerName ){
-        PluginPlayer pluginPlayer = null;
-        Connection conn = null;
-        PreparedStatement s = null;
-        ResultSet rs = null;
-        try {
-
-            conn = Oracle.dbc();
-            s = conn.prepareStatement( "SELECT player_id, player, HEX(player_uuid) FROM oracle_players WHERE player = ?" );
-            s.setString(1, playerName);
-            rs = s.executeQuery();
-
-            if( rs.next() ){
-                pluginPlayer = new PluginPlayer( rs.getInt(1), uuidFromDbString(rs.getString(3)), rs.getString(2) );
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if(rs != null) try { rs.close(); } catch (SQLException e) {}
-            if(s != null) try { s.close(); } catch (SQLException e) {}
-            if(conn != null) try { conn.close(); } catch (SQLException e) {}
-        }
-        return pluginPlayer;
-    }
-
 
     /**
      * Loads `oracle_players` ID for a player into our cache.
@@ -290,7 +218,6 @@ public class PlayerIdentification {
         }
         return pluginPlayer;
     }
-
 
     /**
      * Build-load all online players into cache
