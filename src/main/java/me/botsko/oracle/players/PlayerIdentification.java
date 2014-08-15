@@ -11,10 +11,10 @@ import me.botsko.elixr.TypeUtils;
 import me.botsko.oracle.Oracle;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 public class PlayerIdentification {
-
 
     /**
      * Loads `oracle_players` ID for a real player into our cache.
@@ -24,7 +24,7 @@ public class PlayerIdentification {
      *
      * @param player
      */
-    public static PluginPlayer cacheOraclePlayer( final Player player ){
+    public static PluginPlayer cacheOraclePlayer( final OfflinePlayer player ){
 
         // Lookup the player
         PluginPlayer pluginPlayer = getOraclePlayer( player );
@@ -38,7 +38,6 @@ public class PlayerIdentification {
         return pluginPlayer;
 
     }
-    
 
     /**
      * Returns a `oracle_players` ID for the described player name. If
@@ -66,7 +65,6 @@ public class PlayerIdentification {
 
     }
 
-
     /**
      * Returns a `oracle_players` ID for the described player object. If
      * one cannot be found, returns 0.
@@ -76,7 +74,7 @@ public class PlayerIdentification {
      * @param playerName
      * @return
      */
-    public static PluginPlayer getOraclePlayer( Player player ){
+    public static PluginPlayer getOraclePlayer( OfflinePlayer player ){
 
         if( player.getUniqueId() == null ){
             // If they have a name, we can attempt to find them that way
@@ -105,7 +103,6 @@ public class PlayerIdentification {
 
     }
 
-
     /**
      * Compares the known player to the cached data. If there's a difference
      * we need to handle it.
@@ -119,7 +116,7 @@ public class PlayerIdentification {
      * @param pluginPlayer
      * @return
      */
-    protected static PluginPlayer comparePlayerToCache( Player player, PluginPlayer pluginPlayer ){
+    protected static PluginPlayer comparePlayerToCache( OfflinePlayer player, PluginPlayer pluginPlayer ){
 
         // Compare for username differences, update database
         if( !player.getName().equals( pluginPlayer.getName() ) ){
@@ -141,7 +138,6 @@ public class PlayerIdentification {
 
     }
 
-
     /**
      * Converts UUID to a string ready for use against database
      * @param player
@@ -149,7 +145,6 @@ public class PlayerIdentification {
     protected static String uuidToDbString( UUID id ){
         return id.toString().replace("-", "");
     }
-
 
     /**
      * Converts UUID to a string ready for use against database
@@ -165,7 +160,6 @@ public class PlayerIdentification {
         completeUuid = completeUuid.toLowerCase();
         return UUID.fromString(completeUuid);
     }
-
 
     /**
      * Saves a real player's UUID and current Username to the `oracle_players`
@@ -206,7 +200,6 @@ public class PlayerIdentification {
         return pluginPlayer;
     }
 
-
     /**
      * Saves a player's UUID to the oracle_players table. We cache the current username
      * as well.
@@ -232,7 +225,6 @@ public class PlayerIdentification {
             if(conn != null) try { conn.close(); } catch (SQLException e) {}
         }
     }
-
 
     /**
      * Loads `oracle_players` ID for a player into our cache.
@@ -262,7 +254,6 @@ public class PlayerIdentification {
         return pluginPlayer;
     }
 
-
     /**
      * Loads `oracle_players` ID for a player into our cache.
      */
@@ -290,7 +281,6 @@ public class PlayerIdentification {
         }
         return pluginPlayer;
     }
-
 
     /**
      * Build-load all online players into cache
