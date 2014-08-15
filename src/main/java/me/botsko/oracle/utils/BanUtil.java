@@ -27,7 +27,7 @@ public class BanUtil {
 		try {
 			
 			// Insert/Get Player ID
-		    PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( player );
+		    PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( player.getName() );
             if( pluginPlayer == null ){
                 throw new Exception("That player has not played on this server.");
             }
@@ -105,7 +105,7 @@ public class BanUtil {
 			conn = Oracle.dbc();
 			
 			// Insert/Get Player ID
-	        PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( player );
+	        PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( player.getName() );
             if( pluginPlayer == null ){
                 throw new Exception("That player has not played on this server.");
             }
@@ -203,7 +203,7 @@ public class BanUtil {
 		try {
 			
 		    // Insert/Get Player ID
-		    PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( player );
+		    PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( player.getName() );
 
 			// A player we've never seen doesn't need to be matched
 			if( pluginPlayer != null ){

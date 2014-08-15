@@ -46,7 +46,7 @@ public class WarningUtil {
 		try {
 			
 		    // Insert/Get Player ID
-		    PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( player );
+		    PluginPlayer pluginPlayer = PlayerIdentification.getOraclePlayer( player.getName() );
 		    if( pluginPlayer == null ){
 		        throw new Exception("That player has not played on this server.");
 		    }
