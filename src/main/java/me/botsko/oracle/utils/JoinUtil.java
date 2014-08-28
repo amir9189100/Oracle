@@ -311,8 +311,10 @@ public class JoinUtil {
 	                + "LEFT JOIN oracle_players p ON p.player_id = j.player_id "
 	                + "LEFT JOIN oracle_ips i ON j.ip_id = i.ip_id "
 	                + "WHERE A.ip_id IS NOT NULL "
+	                + "AND p.player_id != ? "
 	                + "ORDER BY p.player ");
     		s.setInt(1, pluginPlayer.getId());
+    		s.setInt(2, pluginPlayer.getId());
     		s.executeQuery();
     		rs = s.getResultSet();
     		
