@@ -79,7 +79,7 @@ public class SeenUtil {
             rs = s.getResultSet();
             
             if(rs.first()){
-                seen = new Date(rs.getLong("player_quit") * 1000);
+                seen = new Date(rs.getLong("player_join") * 1000);
             }
             
         } catch (SQLException e) {
