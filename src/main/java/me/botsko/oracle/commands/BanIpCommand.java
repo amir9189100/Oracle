@@ -56,8 +56,10 @@ public class BanIpCommand implements SubHandler {
 		BanUtil.banByIp( call.getSender(), ip, reason );
 		
 		// Kick all players with this IP
+		System.out.println("Kicking all players with IP: " + ip);
 		for( Player p : Bukkit.getOnlinePlayers() ){
 		    String p_ip = p.getAddress().getAddress().toString().replace( "/", "" );
+		    System.out.println("Player IP: " + p_ip);
 		    if( p_ip.equals( ip ) ){
 		        p.kickPlayer( reason );
 		    }
