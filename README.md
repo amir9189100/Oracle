@@ -59,6 +59,7 @@ Minechat logins are treated by bukkit as if the actual player has logged in, and
 
 - `oracle.alts` - `/alts [player]` - View all alternate possible accounts for this player
 - `oracle.alerts.alts` - Alerts player with this permission when a first-time user joins who has alts
+- `oracle.minechat` - Allows player to bypass the Minechat blocker, if enabled.
 - `oracle.seen` - `/seen [player]` - View the date a player joined and was last here
 - `oracle.played` - `/played [player]` - View the total playtime of a player.
 
