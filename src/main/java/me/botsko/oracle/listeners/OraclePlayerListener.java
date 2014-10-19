@@ -223,6 +223,8 @@ public class OraclePlayerListener implements Listener {
 		
 		if( !Oracle.config.getBoolean("oracle.kick-minechat") ) return;
 		
+		if ( player.hasPermission("oracle.minechat") ) return;
+		
 		if( event.getMessage().matches("connected.*MineChat") ){
 			player.kickPlayer( "MineChat is not allowed... sorry" );
 		}
