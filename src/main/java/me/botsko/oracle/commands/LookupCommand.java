@@ -33,9 +33,9 @@ public class LookupCommand implements SubHandler {
 
 				try {
 					BanUtil.playerMayJoin( player );
-					call.getSender().sendMessage(Oracle.messenger.playerHeaderMsg( call.getArg(0) + " is not banned." ));
+					call.getSender().sendMessage(Oracle.messenger.playerHeaderMsg( username + " is not banned." ));
 				} catch ( Exception e ){
-					call.getSender().sendMessage(Oracle.messenger.playerHeaderMsg( call.getArg(0) + " is banned. Reason: " + e.getMessage() + "."));
+					call.getSender().sendMessage(Oracle.messenger.playerHeaderMsg( username + " is banned. Reason: " + e.getMessage() + "."));
 				}
 			}
     	}).start();
